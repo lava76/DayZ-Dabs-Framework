@@ -1,14 +1,13 @@
 class UInt32
 {
 	// Great for debugging bit masks and fancy integer bullshit
-	static array<bool> ToBitArray(int value)
+	static void ToBitArray(int value, out bool result[32])
 	{
-		array<bool> output = {};
 		for (int i = 0; i < 32; i++) {	
-			output.InsertAt((((value >> i) & 1) == 1), i);
+			result[i] = ((value >> i) & 1);
 		}
 		
-		return output;
+		reversearray(result);
 	}
 	
     //A + B

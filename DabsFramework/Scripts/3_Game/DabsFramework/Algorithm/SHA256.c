@@ -16,6 +16,7 @@ class SHA256_CTX
 // Pulled from https://www.movable-type.co.uk/scripts/sha256.html
 // adapted for Enfusion by InclementDab
 // original idea from Kegan
+// All UInt32 functionality from Kegan
 class SHA256
 {
 	protected uint H[8] = {
@@ -44,20 +45,44 @@ class SHA256
 		// convert string msg into 512-bit blocks (array of 16 32-bit integers)
 		int l = msg.Length() / 4 + 2;
 		int n = Math.Ceil(l / 16);
-		ref array<ref array<int>> m = {};
+		array<ref array<int>> m = {};
 		
-		for (int i = 0; i < n; i++) {
+		int i, j, k;
+		for (i = 0; i < n; i++) {
 			// init array
 			m.InsertAt(new array<int>(), i);
-			for (int j = 0; j < 16; j++) {
-				int value = CharCodeAt(msg, i * 64 + j * 4 + 0) << 24;
-				value = Algorithm.BITWISE_XOR(value, CharCodeAt(msg, i * 64 + j * 4 + 1) << 16);				
-				value = Algorithm.BITWISE_XOR(value, CharCodeAt(msg, i * 64 + j * 4 + 2) << 8);
-				value = Algorithm.BITWISE_XOR(value, CharCodeAt(msg, i * 64 + j * 4 + 3) << 0);
-				m[i].InsertAt(value, j);
+			for (j = 0; j < 16; j++) {
+				int bit_block = CharCodeAt(msg, i * 64 + j * 4 + 0) << 24;
+				bit_block = Algorithm.BITWISE_XOR(bit_block, CharCodeAt(msg, i * 64 + j * 4 + 1) << 16);				
+				bit_block = Algorithm.BITWISE_XOR(bit_block, CharCodeAt(msg, i * 64 + j * 4 + 2) << 8);
+				bit_block = Algorithm.BITWISE_XOR(bit_block, CharCodeAt(msg, i * 64 + j * 4 + 3) << 0);
+				m[i].InsertAt(bit_block, j);
 			}
 		}
 		
+		// add length (in bits) into final pair of 32-bit integers (big-endian)
+		// note: most significant word would be (len-1)*8 >>> 32
+		m[n - 1][14] = Math.Floor(((msg.Length() - 1) * 8) / Math.Pow(32, 2));
+		m[n - 1][15] = UInt32.ShiftRight(((msg.Length() - 1) * 8), 0);
+
+		
+		// Hash computation
+		for (i = 0; i < n; i++) {
+			int w[64];
+			for (int t = 0; t < 16; t++) {
+				w[t] = m[i][t]; // what the fuck (mit pog)
+			}
+						
+			for (t = 16; t < 64; t++) {		
+				int s1 = SIG1(w[t - 2]) + w[t - 7];
+				int s0 = SIG0(w[t - 15]) + w[t - 16];
+				
+				//Print(SIG0(w[t - 15]) + w[t - 16]);
+				w[t] = UInt32.ShiftRight(s0 + s1, 0);
+				bool result[32];
+				UInt32.ToBitArray(w[t], result);
+			}
+		}
 		
 		return string.Empty;
 	}
@@ -70,6 +95,32 @@ class SHA256
 		
 		return msg[index].Hash();
 	}
+		
+    static uint ROTR(int n, int x)
+    {
+		return (UInt32.ShiftRight(x, n) | ( x << (32 - n));
+    }
+	
+	static int EP0(int x)
+	{
+		return (Algorithm.BITWISE_XOR(Algorithm.BITWISE_XOR(ROTR(2, x), ROTR(13, x)), ROTR(22, x)));
+	}
+	
+	static int EP1(int x)
+	{
+		return (Algorithm.BITWISE_XOR(Algorithm.BITWISE_XOR(ROTR(6, x), ROTR(11, x)), ROTR(25, x)));
+	}
+	
+	static int SIG0(int x)
+	{
+		return (Algorithm.BITWISE_XOR(Algorithm.BITWISE_XOR(ROTR(7, x), ROTR(18, x)), UInt32.ShiftRight(x, 3)));
+	}
+	
+	static int SIG1(int x)
+	{
+		return (Algorithm.BITWISE_XOR(Algorithm.BITWISE_XOR(ROTR(17, x), ROTR(19, x)), UInt32.ShiftRight(x, 10)));
+	}
+	
 	
 /*
     array<byte> Compute(uint data[64], uint length)
