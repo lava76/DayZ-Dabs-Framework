@@ -35,37 +35,16 @@ class SHA256
     };
 	
     ref SHA256_CTX Context = new SHA256_CTX();
-    byte Hash[32];
-    bool Finished;
+    ref array<byte> Hash = {}; // max 32
 
-    array<byte> Compute(byte data[], uint length)
+    array<byte> Compute(uint data[64], uint length)
     {
-		array<byte> hash = {};
-		
-        if (Finished) {
-            Error("SHA256 Object Already Computed! Construct a new object to calculate a new Hash! Use the static helper functions!");
-			copyarray(hash, Hash);
-            return hash;
-        }
-
-        Update(data, length);
-        Final();
-
-		Print(Hash);
-		copyarray(hash, Hash);
-        return hash;
-    }
-
-	
-    private void Update(byte data[], uint len)
-    {
-        for (uint i = 0; i < len; ++i)
-        {
+		int i;
+        for (i = 0; i < length; i++) {
             Context.Data[Context.DataLen] = data[i];
             Context.DataLen++;
 
-            if (Context.DataLen == 64)
-            {
+            if (Context.DataLen == 64) {
                 Transform(Context.Data);
 
                 array<uint> results = DBL_INT_ADD(Context.BitLen[0], Context.BitLen[1], 512);
@@ -75,14 +54,57 @@ class SHA256
                 Context.DataLen = 0;
             }
         }
+		
+		// Final
+        i = Context.DataLen;
+        if (Context.DataLen < 56) {
+            Context.Data[i++] = 0x80;
+
+            while (i < 56) {
+                Context.Data[i++] = 0x00;
+			}
+        } else {
+            Context.Data[i++] = 0x80;
+            while (i < 64) {
+                Context.Data[i++] = 0x00;
+			}
+
+            Transform(Context.Data);
+        }
+		
+        array<uint> result = DBL_INT_ADD(Context.BitLen[0], Context.BitLen[1], Context.DataLen * 8);
+        Context.BitLen[0] = result[0];
+        Context.BitLen[1] = result[1];
+        Context.Data[63] = UInt8.Convert(Context.BitLen[0]);
+        Context.Data[62] = UInt8.Convert(UInt32.ShiftRight(Context.BitLen[0], 8));
+        Context.Data[61] = UInt8.Convert(UInt32.ShiftRight(Context.BitLen[0], 16));
+        Context.Data[60] = UInt8.Convert(UInt32.ShiftRight(Context.BitLen[0], 24));
+        Context.Data[59] = UInt8.Convert(Context.BitLen[1]);
+        Context.Data[58] = UInt8.Convert(UInt32.ShiftRight(Context.BitLen[1], 8));
+        Context.Data[57] = UInt8.Convert(UInt32.ShiftRight(Context.BitLen[1], 16));
+        Context.Data[56] = UInt8.Convert(UInt32.ShiftRight(Context.BitLen[1], 24));
+        Transform(Context.Data);
+        for (i = 0; i < 4; i++) {
+            int shift = 24 - (i * 8);
+            Hash[i] = UInt8.Convert(UInt32.ShiftRight(Context.State[0], shift));
+            Hash[i + 4] = UInt8.Convert(UInt32.ShiftRight(Context.State[1], shift));
+            Hash[i + 8] = UInt8.Convert(UInt32.ShiftRight(Context.State[2], shift));
+            Hash[i + 12] = UInt8.Convert(UInt32.ShiftRight(Context.State[3], shift));
+            Hash[i + 16] = UInt8.Convert(UInt32.ShiftRight(Context.State[4], shift));
+            Hash[i + 20] = UInt8.Convert(UInt32.ShiftRight(Context.State[5], shift));
+            Hash[i + 24] = UInt8.Convert(UInt32.ShiftRight(Context.State[6], shift));
+            Hash[i + 28] = UInt8.Convert(UInt32.ShiftRight(Context.State[7], shift));
+        }
+
+        return Hash;
     }
 	
-    private void Transform(byte data[])
+    private void Transform(byte data[64])
     {
         uint a, b, c, d, e, f, g, h, i, j, t1, t2;
         //initialize M to be filled with 64 0s
         array<uint> m = {};
-        for(int m_itr = 0; m_itr < 64; m_itr++) m.Insert(0);
+        for (int m_itr = 0; m_itr < 64; m_itr++) m.Insert(0);
 
         j = 0;
         for (i = 0; i < 16; ++i)
@@ -136,49 +158,7 @@ class SHA256
         Context.State[6] = Context.State[6] + g;
         Context.State[7] = Context.State[7] + h;
     }
-    private void Final()
-    {
-        uint i = Context.DataLen;
-        if (Context.DataLen < 56) {
-            Context.Data[i++] = 0x80;
-
-            while (i < 56) {
-                Context.Data[i++] = 0x00;
-			}
-        } else {
-            Context.Data[i++] = 0x80;
-            while (i < 64) {
-                Context.Data[i++] = 0x00;
-			}
-
-            Transform(Context.Data);
-        }
-		
-        array<uint> result = DBL_INT_ADD(Context.BitLen[0], Context.BitLen[1], Context.DataLen * 8);
-        Context.BitLen[0] = result[0];
-        Context.BitLen[1] = result[1];
-        Context.Data[63] = UInt8.Convert(Context.BitLen[0]);
-        Context.Data[62] = UInt8.Convert(UInt32.ShiftRight(Context.BitLen[0], 8));
-        Context.Data[61] = UInt8.Convert(UInt32.ShiftRight(Context.BitLen[0], 16));
-        Context.Data[60] = UInt8.Convert(UInt32.ShiftRight(Context.BitLen[0], 24));
-        Context.Data[59] = UInt8.Convert(Context.BitLen[1]);
-        Context.Data[58] = UInt8.Convert(UInt32.ShiftRight(Context.BitLen[1], 8));
-        Context.Data[57] = UInt8.Convert(UInt32.ShiftRight(Context.BitLen[1], 16));
-        Context.Data[56] = UInt8.Convert(UInt32.ShiftRight(Context.BitLen[1], 24));
-        Transform(Context.Data);
-        for (i = 0; i < 4; i++) {
-            int shift = 24 - (i * 8);
-            Hash[i] = UInt8.Convert(UInt32.ShiftRight(Context.State[0], shift));
-            Hash[i + 4] = UInt8.Convert(UInt32.ShiftRight(Context.State[1], shift));
-            Hash[i + 8] = UInt8.Convert(UInt32.ShiftRight(Context.State[2], shift));
-            Hash[i + 12] = UInt8.Convert(UInt32.ShiftRight(Context.State[3], shift));
-            Hash[i + 16] = UInt8.Convert(UInt32.ShiftRight(Context.State[4], shift));
-            Hash[i + 20] = UInt8.Convert(UInt32.ShiftRight(Context.State[5], shift));
-            Hash[i + 24] = UInt8.Convert(UInt32.ShiftRight(Context.State[6], shift));
-            Hash[i + 28] = UInt8.Convert(UInt32.ShiftRight(Context.State[7], shift));
-        }
-    }
-
+	
     //This function treats A and B as one 64bit unsigned integer and adds C to it
     private array<uint> DBL_INT_ADD(uint a, uint b, uint c)
     {
@@ -193,7 +173,7 @@ class SHA256
         return { a, b };
     }
     
-    static array<byte> ComputeArray(byte data[], uint length)
+    static array<byte> ComputeArray(byte data[64], uint length)
     {
         SHA256 crypto = new SHA256();
         return crypto.Compute(data, length);
@@ -202,14 +182,16 @@ class SHA256
 	static array<byte> ComputeArray(array<byte> data)
 	{
 		byte _data[64];
-		copyarray(_data, data);
-		Print(data.Count());
+		for (int i = 0; i < 64; i++) {
+			_data[i] = data[i]; // copyarray no worky :(
+		}
+		
 		return ComputeArray(_data, data.Count());
 	}
 	
     static string ComputeString(string data)
     {
-        array<byte> hash = SHA256.ComputeArray(Encoding.GetBytes(data)); //data.Length()
+        array<byte> hash = SHA256.ComputeArray(Encoding.GetBytes(data));
         return Encoding.FromBytesHex(hash);
     }
 }
