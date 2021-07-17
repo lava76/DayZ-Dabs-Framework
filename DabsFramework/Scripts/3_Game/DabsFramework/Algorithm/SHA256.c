@@ -76,11 +76,19 @@ class SHA256
 			for (t = 16; t < 64; t++) {		
 				int s1 = SIG1(w[t - 2]) + w[t - 7];
 				int s0 = SIG0(w[t - 15]) + w[t - 16];
-				
-				//Print(SIG0(w[t - 15]) + w[t - 16]);
 				w[t] = UInt32.ShiftRight(s0 + s1, 0);
-				bool result[32];
-				UInt32.ToBitArray(w[t], result);
+			}
+			
+			int a = H[0];
+			int b = H[1];
+			int c = H[2];
+			int d = H[3];
+			int e = H[4];
+			int f = H[5];
+			int g = H[6];
+			
+			for (t = 0; t < 64; t++) {
+				
 			}
 		}
 		
