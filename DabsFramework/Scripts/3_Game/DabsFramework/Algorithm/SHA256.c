@@ -19,11 +19,11 @@ class SHA256_CTX
 // All UInt32 functionality from Kegan
 class SHA256
 {
-	protected uint H[8] = {
+	protected static const int H[8] = {
 		0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19,
 	};
 	
-    protected uint K[64] = {
+    protected static const int K[64] = {
         0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
         0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
         0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,
@@ -88,7 +88,7 @@ class SHA256
 			int g = H[6];
 			
 			for (t = 0; t < 64; t++) {
-				
+				//int t1 = EP1(e) + 
 			}
 		}
 		
@@ -127,6 +127,16 @@ class SHA256
 	static int SIG1(int x)
 	{
 		return (Algorithm.BITWISE_XOR(Algorithm.BITWISE_XOR(ROTR(17, x), ROTR(19, x)), UInt32.ShiftRight(x, 10)));
+	}
+	
+	static int Ch(int x, int y, int z)
+	{
+		return (Algorithm.BITWISE_XOR((x & y), (~x & z));
+	}
+	
+	static int Maj(int x, int y, int z)
+	{
+		return (Algorithm.BITWISE_XOR(Algorithm.BITWISE_XOR(x & y, x & z), y & z);
 	}
 	
 	

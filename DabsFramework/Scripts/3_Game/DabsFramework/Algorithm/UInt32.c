@@ -59,23 +59,7 @@ class UInt32
 
         return value;
     }
-		
-    static uint CH(uint x, uint y, uint z)
-    {
-        uint a = (x & y);
-        uint b = ~x;
-        uint c = (b & z);
-        return Algorithm.BITWISE_XOR(a, c); // a ^ c
-    }
-	
-    static uint MAJ(uint x, uint y, uint z)
-    {
-        uint a = x & y;
-        uint b = x & z;
-        uint c = y & z;
-        return Algorithm.BITWISE_XOR(a, Algorithm.BITWISE_XOR(b, c)); //a ^ b ^ c (left-right associativity)
-    }
-	
+			
 	/*
 	
     static uint SIG0(uint x)
