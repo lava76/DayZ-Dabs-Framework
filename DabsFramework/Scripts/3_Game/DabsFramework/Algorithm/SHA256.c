@@ -1,20 +1,11 @@
 class SHA256_CTX
 {
 	byte Data[64];
-	uint State[8];
 	uint BitLen[2];
 	uint DataLen;
 	
 	void SHA256_CTX()
 	{
-		State[0] = 0x6a09e667;
-        State[1] = 0xbb67ae85;
-        State[2] = 0x3c6ef372;
-        State[3] = 0xa54ff53a;
-        State[4] = 0x510e527f;
-        State[5] = 0x9b05688c;
-        State[6] = 0x1f83d9ab;
-        State[7] = 0x5be0cd19;
 		DataLen = 0;
         BitLen[0] = 0;
         BitLen[1] = 0;
@@ -23,8 +14,12 @@ class SHA256_CTX
 
 class SHA256
 {
-    protected ref array<uint> K = {
-        0x428a2f98 ,0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
+	protected uint H[8] = {
+		0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19,
+	};
+	
+    protected uint K[64] = {
+        0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
         0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
         0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,
         0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967,
@@ -46,7 +41,6 @@ class SHA256
 
             if (Context.DataLen == 64) {
                 Transform(Context.Data);
-
                 array<uint> results = DBL_INT_ADD(Context.BitLen[0], Context.BitLen[1], 512);
                 Context.BitLen[0] = results[0];
                 Context.BitLen[1] = results[1];
@@ -83,17 +77,19 @@ class SHA256
         Context.Data[58] = UInt8.Convert(UInt32.ShiftRight(Context.BitLen[1], 8));
         Context.Data[57] = UInt8.Convert(UInt32.ShiftRight(Context.BitLen[1], 16));
         Context.Data[56] = UInt8.Convert(UInt32.ShiftRight(Context.BitLen[1], 24));
+		Print(Context.Data);
         Transform(Context.Data);
+		Print(Context.Data);
         for (i = 0; i < 4; i++) {
             int shift = 24 - (i * 8);
-            Hash[i] = UInt8.Convert(UInt32.ShiftRight(Context.State[0], shift));
-            Hash[i + 4] = UInt8.Convert(UInt32.ShiftRight(Context.State[1], shift));
-            Hash[i + 8] = UInt8.Convert(UInt32.ShiftRight(Context.State[2], shift));
-            Hash[i + 12] = UInt8.Convert(UInt32.ShiftRight(Context.State[3], shift));
-            Hash[i + 16] = UInt8.Convert(UInt32.ShiftRight(Context.State[4], shift));
-            Hash[i + 20] = UInt8.Convert(UInt32.ShiftRight(Context.State[5], shift));
-            Hash[i + 24] = UInt8.Convert(UInt32.ShiftRight(Context.State[6], shift));
-            Hash[i + 28] = UInt8.Convert(UInt32.ShiftRight(Context.State[7], shift));
+            Hash[i] = UInt8.Convert(UInt32.ShiftRight(H[0], shift));
+            Hash[i + 4] = UInt8.Convert(UInt32.ShiftRight(H[1], shift));
+            Hash[i + 8] = UInt8.Convert(UInt32.ShiftRight(H[2], shift));
+            Hash[i + 12] = UInt8.Convert(UInt32.ShiftRight(H[3], shift));
+            Hash[i + 16] = UInt8.Convert(UInt32.ShiftRight(H[4], shift));
+            Hash[i + 20] = UInt8.Convert(UInt32.ShiftRight(H[5], shift));
+            Hash[i + 24] = UInt8.Convert(UInt32.ShiftRight(H[6], shift));
+            Hash[i + 28] = UInt8.Convert(UInt32.ShiftRight(H[7], shift));
         }
 
         return Hash;
@@ -127,14 +123,14 @@ class SHA256
             uint l2_f = m[i - 16];
             m[i] = l2_b + l2_c + l2_e + l2_f;
         }
-        a = Context.State[0];
-        b = Context.State[1];
-        c = Context.State[2];
-        d = Context.State[3];
-        e = Context.State[4];
-        f = Context.State[5];
-        g = Context.State[6];
-        h = Context.State[7];
+        a = H[0];
+        b = H[1];
+        c = H[2];
+        d = H[3];
+        e = H[4];
+        f = H[5];
+        g = H[6];
+        h = H[7];
 		
         for (i = 0; i < 64; ++i)
         {
@@ -149,14 +145,15 @@ class SHA256
             b = a;
             a = UInt32.Add(t1, t2);//t1 + t2;
         }
-        Context.State[0] = Context.State[0] + a;
-        Context.State[1] = Context.State[1] + b;
-        Context.State[2] = Context.State[2] + c;
-        Context.State[3] = Context.State[3] + d;
-        Context.State[4] = Context.State[4] + e;
-        Context.State[5] = Context.State[5] + f;
-        Context.State[6] = Context.State[6] + g;
-        Context.State[7] = Context.State[7] + h;
+		
+        H[0] = H[0] + a;
+        H[1] = H[1] + b;
+        H[2] = H[2] + c;
+        H[3] = H[3] + d;
+        H[4] = H[4] + e;
+        H[5] = H[5] + f;
+        H[6] = H[6] + g;
+        H[7] = H[7] + h;
     }
 	
     //This function treats A and B as one 64bit unsigned integer and adds C to it
@@ -185,13 +182,14 @@ class SHA256
 		for (int i = 0; i < 64; i++) {
 			_data[i] = data[i]; // copyarray no worky :(
 		}
-		
-		return ComputeArray(_data, data.Count());
+				
+		return ComputeArray(_data, 64);
 	}
 	
     static string ComputeString(string data)
     {
         array<byte> hash = SHA256.ComputeArray(Encoding.GetBytes(data));
+		Print(hash.Count());
         return Encoding.FromBytesHex(hash);
     }
 }
