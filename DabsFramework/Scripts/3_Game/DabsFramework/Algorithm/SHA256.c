@@ -38,6 +38,9 @@ class SHA256
 	
 	static string Compute(string msg)
 	{
+		// Initialize Hash
+		int hash[8] = H;
+		
 		// Preprocess
 		int append = 0x80;
 		msg += append.AsciiToString();
@@ -79,20 +82,45 @@ class SHA256
 				w[t] = UInt32.ShiftRight(s0 + s1, 0);
 			}
 			
-			int a = H[0];
-			int b = H[1];
-			int c = H[2];
-			int d = H[3];
-			int e = H[4];
-			int f = H[5];
-			int g = H[6];
+			int a = hash[0];
+			int b = hash[1];
+			int c = hash[2];
+			int d = hash[3];
+			int e = hash[4];
+			int f = hash[5];
+			int g = hash[6];
+			int h = hash[7];
 			
 			for (t = 0; t < 64; t++) {
-				//int t1 = EP1(e) + 
+				int t1 = h + EP1(e) + Ch(e, f, g) + K[t] + w[t];
+				int t2 = EP0(a) + Maj(a, b, c);
+				h = g;
+				g = f;
+				f = e;
+				e = Algorithm.BITWISE_XOR(d + t1, 0);
+				d = c;
+				c = b;
+				b = a;
+				a = Algorithm.BITWISE_XOR(t1 + t2, 0);
 			}
+			
+			hash[0] = Algorithm.BITWISE_XOR(hash[0] + a, 0);
+			hash[1] = Algorithm.BITWISE_XOR(hash[1] + b, 0);
+			hash[2] = Algorithm.BITWISE_XOR(hash[2] + c, 0);
+			hash[3] = Algorithm.BITWISE_XOR(hash[3] + d, 0);
+			hash[4] = Algorithm.BITWISE_XOR(hash[4] + e, 0);
+			hash[5] = Algorithm.BITWISE_XOR(hash[5] + f, 0);
+			hash[6] = Algorithm.BITWISE_XOR(hash[6] + g, 0);
+			hash[7] = Algorithm.BITWISE_XOR(hash[7] + h, 0);
 		}
 		
-		return string.Empty;
+		string hex;
+        for (int hx = 0; hx < 8; hx++) {
+            hex += Encoding.ToHex(hash[hx]);
+			Print(hex);
+        }
+		
+		return hex;
 	}
 	
 	static int CharCodeAt(string msg, int index)
