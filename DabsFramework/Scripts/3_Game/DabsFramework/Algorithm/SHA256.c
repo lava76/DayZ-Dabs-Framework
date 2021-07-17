@@ -12,6 +12,10 @@ class SHA256_CTX
 	}
 }
 
+
+// Pulled from https://www.movable-type.co.uk/scripts/sha256.html
+// adapted for Enfusion by InclementDab
+// original idea from Kegan
 class SHA256
 {
 	protected uint H[8] = {
@@ -30,10 +34,47 @@ class SHA256
     };
 	
     ref SHA256_CTX Context = new SHA256_CTX();
-    ref array<byte> Hash = {}; // max 32
-
+	
+	static string Compute(string msg)
+	{
+		// Preprocess
+		int append = 0x80;
+		msg += append.AsciiToString();
+		
+		// convert string msg into 512-bit blocks (array of 16 32-bit integers)
+		int l = msg.Length() / 4 + 2;
+		int n = Math.Ceil(l / 16);
+		ref array<ref array<int>> m = {};
+		
+		for (int i = 0; i < n; i++) {
+			// init array
+			m.InsertAt(new array<int>(), i);
+			for (int j = 0; j < 16; j++) {
+				int value = CharCodeAt(msg, i * 64 + j * 4 + 0) << 24;
+				value = Algorithm.BITWISE_XOR(value, CharCodeAt(msg, i * 64 + j * 4 + 1) << 16);				
+				value = Algorithm.BITWISE_XOR(value, CharCodeAt(msg, i * 64 + j * 4 + 2) << 8);
+				value = Algorithm.BITWISE_XOR(value, CharCodeAt(msg, i * 64 + j * 4 + 3) << 0);
+				m[i].InsertAt(value, j);
+			}
+		}
+		
+		
+		return string.Empty;
+	}
+	
+	static int CharCodeAt(string msg, int index)
+	{
+		if (index > msg.Length() - 1) {
+			return 0;
+		}
+		
+		return msg[index].Hash();
+	}
+	
+/*
     array<byte> Compute(uint data[64], uint length)
     {
+		array<byte> hash = {}; // max 32
 		int i;
         for (i = 0; i < length; i++) {
             Context.Data[Context.DataLen] = data[i];
@@ -82,17 +123,17 @@ class SHA256
 		Print(Context.Data);
         for (i = 0; i < 4; i++) {
             int shift = 24 - (i * 8);
-            Hash[i] = UInt8.Convert(UInt32.ShiftRight(H[0], shift));
-            Hash[i + 4] = UInt8.Convert(UInt32.ShiftRight(H[1], shift));
-            Hash[i + 8] = UInt8.Convert(UInt32.ShiftRight(H[2], shift));
-            Hash[i + 12] = UInt8.Convert(UInt32.ShiftRight(H[3], shift));
-            Hash[i + 16] = UInt8.Convert(UInt32.ShiftRight(H[4], shift));
-            Hash[i + 20] = UInt8.Convert(UInt32.ShiftRight(H[5], shift));
-            Hash[i + 24] = UInt8.Convert(UInt32.ShiftRight(H[6], shift));
-            Hash[i + 28] = UInt8.Convert(UInt32.ShiftRight(H[7], shift));
+            hash[i] = UInt8.Convert(UInt32.ShiftRight(H[0], shift));
+            hash[i + 4] = UInt8.Convert(UInt32.ShiftRight(H[1], shift));
+            hash[i + 8] = UInt8.Convert(UInt32.ShiftRight(H[2], shift));
+            hash[i + 12] = UInt8.Convert(UInt32.ShiftRight(H[3], shift));
+            hash[i + 16] = UInt8.Convert(UInt32.ShiftRight(H[4], shift));
+            hash[i + 20] = UInt8.Convert(UInt32.ShiftRight(H[5], shift));
+            hash[i + 24] = UInt8.Convert(UInt32.ShiftRight(H[6], shift));
+            hash[i + 28] = UInt8.Convert(UInt32.ShiftRight(H[7], shift));
         }
 
-        return Hash;
+        return hash;
     }
 	
     private void Transform(byte data[64])
@@ -192,4 +233,5 @@ class SHA256
 		Print(hash.Count());
         return Encoding.FromBytesHex(hash);
     }
+	*/
 }
