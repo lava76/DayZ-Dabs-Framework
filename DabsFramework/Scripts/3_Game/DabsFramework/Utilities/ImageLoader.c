@@ -22,9 +22,9 @@ class ImageLoader
         }
         
         for (int i = 0; i < MAX_IMAGE_SIZE; i++) {
-            int byte;
-            image_serializer.Read(byte);
-            image_data.Insert(byte);
+            byte value;
+            image_serializer.Read(value);
+            image_data.Insert(value);
         }
         
         image_serializer.Close();
@@ -65,8 +65,8 @@ class ImageLoader
             return false;
         }
         
-        foreach (int byte: image_data) {
-            image_serializer.Write(byte);
+        foreach (byte value: image_data) {
+            image_serializer.Write(value);
         }
         
         image_serializer.Close();
