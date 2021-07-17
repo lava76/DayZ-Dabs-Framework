@@ -1,5 +1,16 @@
 class UInt32
 {
+	// Great for debugging bit masks and fancy integer bullshit
+	static array<bool> ToBitArray(int value)
+	{
+		array<bool> output = {};
+		for (int i = 0; i < 32; i++) {	
+			output.InsertAt((((value >> i) & 1) == 1), i);
+		}
+		
+		return output;
+	}
+	
     //A + B
     static uint Add(uint a, uint b)
     {
@@ -49,28 +60,7 @@ class UInt32
 
         return value;
     }
-	
-    //--- unsigned bitwise operations
-    static uint ROTLEFT(uint a, byte b)
-    {
-        b = UInt8.Convert(b);
-
-        uint y = (a << b);
-        uint x = (32 - b);
-        uint z = UInt32.ShiftRight(a,x);
-        return (y | z);
-    }
-	
-    static uint ROTRIGHT(uint a, byte b)
-    {
-        b = UInt8.Convert(b); //ensure the byte value is clamped
-
-        uint y = UInt32.ShiftRight(a, b);
-        uint x = (32 - b);
-        uint z = (a << x); //left shift works on Unsigned Integers
-        return (y | z);
-    }
-	
+		
     static uint CH(uint x, uint y, uint z)
     {
         uint a = (x & y);
@@ -87,21 +77,7 @@ class UInt32
         return Algorithm.BITWISE_XOR(a, Algorithm.BITWISE_XOR(b, c)); //a ^ b ^ c (left-right associativity)
     }
 	
-    static uint EP0(uint x)
-    {
-        uint a = UInt32.ROTRIGHT(x, 2);
-        uint b = UInt32.ROTRIGHT(x, 13);
-        uint c = UInt32.ROTRIGHT(x, 22);
-        return Algorithm.BITWISE_XOR(a, Algorithm.BITWISE_XOR(b, c)); //a ^ b ^ c
-    }
-	
-    static uint EP1(uint x)
-    {
-        uint a = UInt32.ROTRIGHT(x, 6);
-        uint b = UInt32.ROTRIGHT(x, 11);
-        uint c = UInt32.ROTRIGHT(x, 25);
-        return Algorithm.BITWISE_XOR(a, Algorithm.BITWISE_XOR(b, c)); //a ^ b ^ c
-    }
+	/*
 	
     static uint SIG0(uint x)
     {
@@ -111,11 +87,12 @@ class UInt32
         return Algorithm.BITWISE_XOR(a, Algorithm.BITWISE_XOR(b, c)); //a ^ b ^ c
     }
 	
+	
     static uint SIG1(uint x)
     {
         uint a = UInt32.ROTRIGHT(x, 17);
         uint b = UInt32.ROTRIGHT(x, 19);
         uint c = UInt32.ShiftRight(x, 10);
         return Algorithm.BITWISE_XOR(a, Algorithm.BITWISE_XOR(b, c)); //a ^ b ^ c
-    }
+    }*/
 }
