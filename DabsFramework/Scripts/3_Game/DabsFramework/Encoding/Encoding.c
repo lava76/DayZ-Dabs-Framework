@@ -97,29 +97,19 @@ class Encoding
 		
 		// bit shifted integer arrays
 		array<int> octet_values = {};
-		foreach (string octet: octets) {
-								// should always be 3
+		for (int i = 0; i < octets.Count(); i++) {
 			int value;
-			for (int i = 0; i < octet.Length(); i++) {
-				value = (octet[i].Hash() % 64) << i * 6;
+			value |= octets[i][0].Hash() % 255;
+			value <<= 8;
+			value |= octets[i][1].Hash() % 255;
+			value <<= 8;
+			value |= octets[i][2].Hash() % 255;
+			for (int j = 0; j < 4; j++) {
+				int x = (value >> j * 6) % 64;
+				result += BASE64_TABLE[x];
 			}
-			
-			octet_values.Insert(value);
 		}
-		
-		foreach (int sextet: octet_values) {
-			
-		}
-				
-		//array<int> byte_array = {};
-		//for (int i = 0; i < input.Length(); i++) {
-		//	byte_array.InsertAt(input[i].Hash(), i);
-		//}
-		
-		
-		
-		
-		
+
 		return result;
 	}
 }
