@@ -1,6 +1,17 @@
+// This typedef thing is a hack to get StringEvaluater to evaluate as strings, then you just call .Parse()
+typedef string StringEvaluater;
+class StringEvaluater: string
+{	
+	float Parse()
+	{
+		StringEvaluaterEvaluater evaluater = new StringEvaluaterEvaluater();
+		return evaluater.Parse(value);
+	}	
+}
+
 class StringEvaluaterEvaluater
 {
-	private string m_Value;
+	protected string m_Value;
 	
 	float Parse(string value)
 	{
@@ -11,13 +22,13 @@ class StringEvaluaterEvaluater
 		float x = ParseExpression(pos, ch);
 		if (pos < value.Length()) {
 			Error("Unexpected: " + ch + " " + value);
-			return -1;
+			return 0;
 		}
 		
 		return x;
 	}
 	
-	private void NextChar(out int pos, out int ch) 
+	protected void NextChar(out int pos, out int ch) 
 	{
 		pos++;
 		if (pos < m_Value.Length()) {
@@ -27,20 +38,30 @@ class StringEvaluaterEvaluater
 		}
 	}
 	
-	private bool Eat(int charToEat, out int pos, out int ch) 
+	protected bool Eat(string char, out int pos, out int ch)
 	{
-	    while (ch == 32) NextChar(pos, ch);
-	    if (ch == charToEat) {
+		return Eat(char.Hash(), pos, ch);
+	}
+	
+	protected bool Eat(int char, out int pos, out int ch) 
+	{
+		// Space
+	    while (ch == 32) {
+			NextChar(pos, ch);
+		}
+		
+	    if (ch == char) {
 	        NextChar(pos, ch);
 	        return true;
 	    }
+		
 	    return false;
 	}
 	
-	private float ParseExpression(out int pos, out int ch) 
+	protected float ParseExpression(out int pos, out int ch) 
 	{
 	    float x = ParseTerm(pos, ch);
-	    while (!false) {
+	    while (true) {
 	        if      (Eat("+".Hash(), pos, ch)) x += ParseTerm(pos, ch); // addition
 	        else if (Eat("-".Hash(), pos, ch)) x -= ParseTerm(pos, ch); // subtraction
 	        else return x;
@@ -49,59 +70,99 @@ class StringEvaluaterEvaluater
 		return x;
 	}
 	
-	private float ParseTerm(out int pos, out int ch) 
+	protected float ParseTerm(out int pos, out int ch) 
 	{
 	    float x = ParseFactor(pos, ch);
 	    while (true) {
-	        if      (Eat("*".Hash(), pos, ch)) x *= ParseFactor(pos, ch); // multiplication
-	        else if (Eat("/".Hash(), pos, ch)) x /= ParseFactor(pos, ch); // division
+	        if      (Eat("*", pos, ch)) x *= ParseFactor(pos, ch); // multiplication
+	        else if (Eat("/", pos, ch)) x /= ParseFactor(pos, ch); // division
 	        else return x;
 	    }
 		
 		return x;
 	}
 	
-	private float ParseFactor(out int pos, out int ch) 
+	protected float ParseFactor(out int pos, out int ch) 
 	{
-	    if (Eat("+".Hash(), pos, ch)) return ParseFactor(pos, ch); // unary plus
-	    if (Eat("-".Hash(), pos, ch)) return -ParseFactor(pos, ch); // unary minus
-	
+		// unary plus
+	    if (Eat("+", pos, ch)) { 
+			return ParseFactor(pos, ch); 
+		}
+		
+		// unary minus
+	    if (Eat("-", pos, ch)) { 
+			return -ParseFactor(pos, ch); 
+		}
+		
 	    float x;
-	    int startPos = pos;
-	    if (Eat("(".Hash(), pos, ch)) { // parentheses
+	    int start_pos = pos;
+		
+		// parentheses
+	    if (Eat("(", pos, ch)) { 
+			// cant return because pos and ch are stored which is DUMB!
 	        x = ParseExpression(pos, ch);
-	        Eat(")".Hash(), pos, ch);
-	    } else if ((ch >= "0".Hash() && ch <= "9".Hash()) || ch == ".".Hash()) { // numbers
-	        while ((ch >= "0".Hash() && ch <= "9".Hash()) || ch == ".".Hash()) 
+	        Eat(")", pos, ch);
+	    } 
+		
+		// numbers
+		else if (IsNumeric(ch)) { 
+	        while (IsNumeric(ch)) {
 				NextChar(pos, ch);
+			}
 
-	        x = (m_Value.Substring(startPos, pos - startPos)).ToFloat();
-	    } else if (ch >= "a".Hash() && ch <= "z".Hash()) { // functions
-	        while (ch >= "a".Hash() && ch <= "z".Hash()) NextChar(pos, ch);
-	        string fnc = m_Value.Substring(startPos, pos - startPos);
-	        x = ParseFactor(pos, ch);
-	        if (fnc == "sqrt") x = Math.Sqrt(x);
-	        else if (fnc == "sin") x = Math.Sin(x * Math.DEG2RAD);
-	        else if (fnc == "cos") x = Math.Cos(x * Math.DEG2RAD);
-	        else if (fnc == "tan") x = Math.Tan(x * Math.DEG2RAD);
-	        else Error("Unknown function: " + fnc);
-	    } else {
-	        //Error("Unexpected: " + ch);
+	        x = (m_Value.Substring(start_pos, pos - start_pos)).ToFloat();
+	    } 
+		
+		// functions
+		else if (IsAlphabetical(ch)) { 
+	        while (IsAlphabetical(ch)) { 
+				NextChar(pos, ch);
+			}
+			
+	        // Handle functions
+			x = EvaluateFunction(m_Value.Substring(start_pos, pos - start_pos), ParseFactor(pos, ch));
 	    }
 	
-	    if (Eat("^".Hash(), pos, ch)) x = Math.Pow(x, ParseFactor(pos, ch)); // exponentiation
+		// exponentiation
+	    if (Eat("^", pos, ch)) { 
+			x = Math.Pow(x, ParseFactor(pos, ch)); 
+		}
 	
 	    return x;
 	}
-}
-
-
-typedef string StringEvaluater;
-class StringEvaluater: string
-{	
-	float Parse()
+	
+	static float EvaluateFunction(string fnc, float value)
 	{
-		StringEvaluaterEvaluater evaluater = new StringEvaluaterEvaluater();
-		return evaluater.Parse(value);
-	}	
+		switch (fnc) {
+			// todo: more functionality!
+			case "sqrt": return Math.Sqrt(value);			
+			case "sin": return Math.Sin(value);			
+			case "cos": return Math.Cos(value);
+			case "tan": return Math.Tan(value);
+		}
+		
+		Error("Unknown Function: " + fnc);
+		return 0;
+	}
+	
+	// Helper funcs
+	static bool IsNumeric(string ch)
+	{
+		return IsNumeric(ch.Hash());
+	}
+	
+	static bool IsNumeric(int ch)
+	{
+		return (ch >= "0".Hash() && ch <= "9".Hash()) || ch == ".".Hash();
+	}
+	
+	static bool IsAlphabetical(string ch)
+	{
+		return IsAlphabetical(ch.Hash());
+	}
+	
+	static bool IsAlphabetical(int ch)
+	{
+		return (ch >= "a".Hash() && ch <= "z".Hash());
+	}
 }
