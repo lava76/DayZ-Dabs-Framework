@@ -83,9 +83,27 @@ class Encoding
 		input.TrimInPlace();
 		
 		// for ever 3 values in byte_array, 4 will exist on the output		
+		
+		// todo: padding probably needs to exist right here, since this
+		// is the actual detection of empty data. not later. its impossible to
+		// distinguish an empty space from A later down the line, since its just
+		// zeros
+		int padding;
 		array<string> octets = {};
 		while (input != string.Empty) {
 			if (input.Length() < 3) {
+				switch (input.Length()) {
+					case 1: {
+						padding = 2;
+						break;
+					}
+					
+					case 2: {
+						padding = 1;
+						break;
+					}
+				}
+				
 				octets.Insert(input);
 				input = string.Empty;
 				continue;
@@ -96,18 +114,28 @@ class Encoding
 		}
 		
 		// bit shifted integer arrays
-		array<int> octet_values = {};
 		for (int i = 0; i < octets.Count(); i++) {
 			int value;
-			value |= octets[i][0].Hash() % 255;
-			value <<= 8;
-			value |= octets[i][1].Hash() % 255;
-			value <<= 8;
-			value |= octets[i][2].Hash() % 255;
-			for (int j = 0; j < 4; j++) {
-				int x = (value >> j * 6) % 64;
-				result += BASE64_TABLE[x];
+			for (int j = 0; j < 3; j++) {
+				if (j >= octets[i].Length()) {
+					continue;
+				}
+				
+				value |= octets[i][j].Hash() % 255;
+				if (j != 2) {
+					value <<= 8;
+				}
 			}
+			
+			for (int k = 3; k >= 0; k--) {
+				Print((value >> k * 6) % 64);
+				result += BASE64_TABLE[(value >> k * 6) % 64];
+			}
+		}
+		
+		// handle padding at end
+		for (int l = 0; l < padding; l++) {
+			result += "=";
 		}
 
 		return result;
