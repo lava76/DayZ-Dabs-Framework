@@ -82,10 +82,41 @@ class Encoding
 		string result;
 		input.TrimInPlace();
 		
-		array<int> byte_array = {};
-		for (int i = 0; i < input.Length(); i++) {
-			byte_array.InsertAt(input[i].Hash(), i);
+		// for ever 3 values in byte_array, 4 will exist on the output		
+		array<string> octets = {};
+		while (input != string.Empty) {
+			if (input.Length() < 3) {
+				octets.Insert(input);
+				input = string.Empty;
+				continue;
+			}
+			
+			octets.Insert(input.Substring(0, 3));
+			input = input.Substring(3, input.Length());
 		}
+		
+		// bit shifted integer arrays
+		array<int> octet_values = {};
+		foreach (string octet: octets) {
+								// should always be 3
+			int value;
+			for (int i = 0; i < octet.Length(); i++) {
+				value = (octet[i].Hash() % 64) << i * 6;
+			}
+			
+			octet_values.Insert(value);
+		}
+		
+		foreach (int sextet: octet_values) {
+			
+		}
+				
+		//array<int> byte_array = {};
+		//for (int i = 0; i < input.Length(); i++) {
+		//	byte_array.InsertAt(input[i].Hash(), i);
+		//}
+		
+		
 		
 		
 		
