@@ -88,9 +88,10 @@ class Encoding
 		// is the actual detection of empty data. not later. its impossible to
 		// distinguish an empty space from A later down the line, since its just
 		// zeros
+		
 		int padding;
-		array<string> octets = {};
-		while (input != string.Empty) {
+		while (input != string.Empty) {	
+			string octet;
 			if (input.Length() < 3) {
 				switch (input.Length()) {
 					case 1: {
@@ -104,30 +105,32 @@ class Encoding
 					}
 				}
 				
-				octets.Insert(input);
+				octet = input;
 				input = string.Empty;
-				continue;
+			} else {
+				octet = input.Substring(0, 3);
+				input = input.Substring(3, input.Length());
 			}
 			
-			octets.Insert(input.Substring(0, 3));
-			input = input.Substring(3, input.Length());
-		}
-		
-		// bit shifted integer arrays
-		for (int i = 0; i < octets.Count(); i++) {
 			int value;
 			for (int j = 0; j < 3; j++) {
-				if (j >= octets[i].Length()) {
-					continue;
-				}
+				//if (j >= octet.Length()) {
+				//	continue;
+				//}
 				
-				value |= octets[i][j].Hash() % 255;
+				value |= octet[j].Hash() % 255;
 				if (j != 2) {
 					value <<= 8;
 				}
 			}
 			
 			for (int k = 3; k >= 0; k--) {
+				// Is padded value
+				Print(k);
+				if (k <= padding - 1) {
+					continue;
+				}
+				
 				Print((value >> k * 6) % 64);
 				result += BASE64_TABLE[(value >> k * 6) % 64];
 			}
