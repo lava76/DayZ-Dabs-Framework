@@ -12,10 +12,6 @@ class EditorObjectData: SerializableBase
 	vector Orientation;
 	float Scale = 1;
 	
-	// todo: remove this nonserialized so this can save
-	[NonSerialized()]
-	ref array<string> Attachments = {};
-	
 	// Re-enable this once we get versioned serializing working :)
 	//bool EditorOnly = false;
 	
@@ -35,9 +31,6 @@ class EditorObjectData: SerializableBase
 	
 	[NonSerialized()]
 	Object WorldObject;
-	
-	[NonSerialized()]
-	ref map<string, ref Param> Parameters = new map<string, ref Param>();
 	
 	void EditorObjectData() 
 	{
