@@ -108,15 +108,15 @@ class Encoding
 				octet = input;
 				input = string.Empty;
 			} else {
-				octet = input.Substring(0, 3);
-				input = input.Substring(3, input.Length());
+				octet = input.Substring(0, 3);				
+				input = input.Substring(3, input.Length() - 1);
 			}
 			
 			int value;
 			for (int j = 0; j < 3; j++) {
-				//if (j >= octet.Length()) {
-				//	continue;
-				//}
+				/*if (j >= octet.Length()) {
+					continue;
+				}*/
 				
 				value |= octet[j].Hash() % 255;
 				if (j != 2) {
