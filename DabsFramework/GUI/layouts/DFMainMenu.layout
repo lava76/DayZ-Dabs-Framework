@@ -1149,7 +1149,7 @@ FrameWidgetClass main_menu_root {
    nocache 1
   }
   WrapSpacerWidgetClass ModsSimple {
-   visible 1
+   visible 0
    clipchildren 0
    ignorepointer 1
    position 100 10
