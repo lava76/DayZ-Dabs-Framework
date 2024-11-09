@@ -53,7 +53,7 @@ class DropdownListPrefab<Class TValue>: ScriptView
 		m_DropdownPrefabController.ItemList.Insert(element);
 	}
 	
-	DropdownListPrefabItem<TValue> Get(TValue value)
+	DropdownListPrefabItem<TValue> GetByValue(TValue value)
 	{
 		for (int i = 0; i < m_DropdownPrefabController.ItemList.Count(); i++) {
 			if (!m_DropdownPrefabController.ItemList[i]) {

@@ -1,6 +1,6 @@
 WrapSpacerWidgetClass EditBoxPrefab {
  visible 1
- size 1 18
+ size 1 24
  halign center_ref
  valign center_ref
  hexactpos 1
@@ -15,29 +15,33 @@ WrapSpacerWidgetClass EditBoxPrefab {
  {
   FrameWidgetClass CaptionFrame {
    ignorepointer 1
-   size 0.25 18
+   size 0.25 1
    valign center_ref
    hexactpos 1
    vexactpos 1
    hexactsize 0
-   vexactsize 1
+   vexactsize 0
    {
     TextWidgetClass Caption {
      clipchildren 0
      ignorepointer 0
-     position 7 0
-     size 1 16
+     position 0 0
+     size 1 1
+     halign center_ref
      valign center_ref
      hexactpos 1
      vexactpos 1
      hexactsize 0
-     vexactsize 1
+     vexactsize 0
+     scaled 1
      priority 1
      scriptclass "ViewBinding"
      style Normal
      text "Caption"
-     "text offset" 3 0
+     font "gui/fonts/MetronBook22"
+     "text offset" -12 0
      "size to text h" 0
+     "text halign" right
      "text valign" center
      {
       ScriptParamsClass {
@@ -49,20 +53,20 @@ WrapSpacerWidgetClass EditBoxPrefab {
   }
   FrameWidgetClass ContentFrame {
    ignorepointer 1
-   size 0.7 18
+   size 0.75 1
    hexactpos 1
    vexactpos 1
    hexactsize 0
-   vexactsize 1
+   vexactsize 0
    {
     TextWidgetClass ContentText {
      visible 1
-     size 0.7 16
+     size 0.7 1
      valign center_ref
      hexactpos 1
      vexactpos 1
      hexactsize 0
-     vexactsize 1
+     vexactsize 0
      scriptclass "ViewBinding"
      style Normal
      font "gui/fonts/etelkatextpro"

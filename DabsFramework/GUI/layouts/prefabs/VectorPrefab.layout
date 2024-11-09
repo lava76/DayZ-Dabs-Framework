@@ -1,6 +1,8 @@
 PanelWidgetClass EditorPosElement {
  clipchildren 0
- size 1 20
+ size 1 24
+ halign center_ref
+ valign center_ref
  hexactpos 1
  vexactpos 1
  hexactsize 0
@@ -10,11 +12,11 @@ PanelWidgetClass EditorPosElement {
   WrapSpacerWidgetClass PositionSpacer {
    clipchildren 1
    ignorepointer 1
-   size 1 20
+   size 1 1
    hexactpos 1
    vexactpos 1
    hexactsize 0
-   vexactsize 1
+   vexactsize 0
    Padding 0
    Margin 0
    {
@@ -28,16 +30,20 @@ PanelWidgetClass EditorPosElement {
      {
       TextWidgetClass EditorPosElementLabel {
        ignorepointer 1
-       position 7 2
-       size 1 16
+       position 0 0
+       size 1 1
+       halign center_ref
+       valign center_ref
        hexactpos 1
        vexactpos 1
        hexactsize 0
-       vexactsize 1
+       vexactsize 0
        scriptclass "ViewBinding"
-       text "lslslslsl"
-       font "gui/fonts/etelkatextpro"
-       "text offset" 3 0
+       text "Text Label:"
+       font "gui/fonts/MetronBook22"
+       "text offset" -12 0
+       "exact text" 0
+       "text halign" right
        "text valign" center
        {
         ScriptParamsClass {
@@ -48,23 +54,25 @@ PanelWidgetClass EditorPosElement {
      }
     }
     PanelWidgetClass frame_x {
+     visible 1
      clipchildren 1
      ignorepointer 1
-     color 0.7059 0.7059 0.7059 0.9961
-     size 0.226 1
+     color 0.7647 0.1804 0.102 0.2353
+     position 0 0
+     size 0.25 1
      valign center_ref
      hexactpos 1
      vexactpos 1
      hexactsize 0
      vexactsize 0
-     style Outline_1px
+     style rover_sim_colorable
      {
       PanelWidgetClass lbl_x0 {
        ignorepointer 1
        keepsafezone 0
        color 0.7647 0.1804 0.102 1
-       position 1 0
-       size 18 18
+       position 0 0
+       size 24 24
        valign center_ref
        hexactpos 1
        vexactpos 1
@@ -91,73 +99,50 @@ PanelWidgetClass EditorPosElement {
         }
        }
       }
-      PanelWidgetClass txt_x0 {
+      EditBoxWidgetClass x_value {
+       visible 1
        clipchildren 1
-       ignorepointer 1
-       color 0.7647 0.1804 0.102 0.0784
-       position 20 0
-       size 0.9 1
+       color 1 1 1 0.9608
+       position 28 0
+       size 256 0.9
        valign center_ref
        hexactpos 1
        vexactpos 1
-       hexactsize 0
+       hexactsize 1
        vexactsize 0
-       style rover_sim_colorable
+       scaled 1
+       scriptclass "ViewBinding"
+       style Default
+       text "12345678910!"
+       "limit visible" 0
+       "exact text" 1
+       font "gui/fonts/Metron22"
        {
-        EditBoxWidgetClass x_value {
-         visible 1
-         clipchildren 1
-         color 1 1 1 0.9608
-         position 2 0
-         size 0.965 16
-         valign center_ref
-         hexactpos 1
-         vexactpos 1
-         hexactsize 0
-         vexactsize 1
-         scriptclass "ViewBinding"
-         style Default
-         text "reee"
-         "limit visible" 0
-         "exact text" 0
-         font "gui/fonts/sdf_MetronLight24"
-         {
-          ScriptParamsClass {
-           Binding_Name "X"
-           Two_Way_Binding 1
-          }
-         }
+        ScriptParamsClass {
+         Binding_Name "X"
+         Two_Way_Binding 1
         }
        }
       }
      }
     }
-    FrameWidgetClass x_y_spacer {
-     ignorepointer 1
-     position 0 10
-     size 0.01 20
-     hexactpos 0
-     vexactpos 1
-     hexactsize 0
-     vexactsize 1
-    }
     PanelWidgetClass frame_y {
      ignorepointer 1
-     color 0.7059 0.7059 0.7059 0.9961
-     size 0.226 1
+     color 0.5765 0.8157 0.2196 0.2353
+     size 0.25 1
      valign center_ref
      hexactpos 1
      vexactpos 1
      hexactsize 0
      vexactsize 0
-     style Outline_1px
+     style rover_sim_colorable
      {
       PanelWidgetClass lbl_y {
        ignorepointer 1
        keepsafezone 0
        color 0.5765 0.8157 0.2196 1
-       position 1 0
-       size 18 18
+       position 0 0
+       size 24 24
        valign center_ref
        hexactpos 1
        vexactpos 1
@@ -185,75 +170,53 @@ PanelWidgetClass EditorPosElement {
         }
        }
       }
-      PanelWidgetClass txt_y {
-       ignorepointer 1
-       color 0.5765 0.8157 0.2196 0.0784
-       position 20 0
-       size 0.9 1
+      EditBoxWidgetClass y_value {
+       visible 1
+       keepsafezone 0
+       color 1 1 1 0.9608
+       position 28 0
+       size 256 0.9
        valign center_ref
        hexactpos 1
        vexactpos 1
-       hexactsize 0
+       hexactsize 1
        vexactsize 0
-       style rover_sim_colorable
+       scriptclass "ViewBinding"
+       style Default
+       "no focus" 0
+       text "12345678910!"
+       "limit visible" 0
+       "exact text" 1
+       font "gui/fonts/Metron22"
        {
-        EditBoxWidgetClass y_value {
-         visible 1
-         keepsafezone 0
-         color 1 1 1 0.9608
-         position 2 0
-         size 0.97 16
-         valign center_ref
-         hexactpos 1
-         vexactpos 1
-         hexactsize 0
-         vexactsize 1
-         scriptclass "ViewBinding"
-         style Green_Hightlight
-         text "reee"
-         "limit visible" 0
-         "exact text" 0
-         font "gui/fonts/sdf_MetronLight24"
-         {
-          ScriptParamsClass {
-           Binding_Name "Y"
-           Two_Way_Binding 1
-          }
-         }
+        ScriptParamsClass {
+         Binding_Name "Y"
+         Two_Way_Binding 1
         }
        }
       }
      }
     }
-    FrameWidgetClass y_z_spacer {
-     ignorepointer 1
-     position 0 0
-     size 0.01 20
-     hexactpos 0
-     vexactpos 0
-     hexactsize 0
-     vexactsize 1
-    }
     PanelWidgetClass frame_z {
      clipchildren 1
      ignorepointer 1
-     color 0.7059 0.7059 0.7059 0.9961
+     color 0.2588 0.5176 0.9176 0.2353
      position 0 0
-     size 0.226 1
+     size 0.25 1
      valign center_ref
      hexactpos 1
      vexactpos 1
      hexactsize 0
      vexactsize 0
-     style Outline_1px
+     style rover_sim_colorable
      {
       PanelWidgetClass lbl_z {
        clipchildren 1
        ignorepointer 1
        keepsafezone 0
        color 0.2588 0.5176 0.9176 1
-       position 1 0
-       size 18 18
+       position 0 0
+       size 24 24
        valign center_ref
        hexactpos 1
        vexactpos 1
@@ -279,44 +242,29 @@ PanelWidgetClass EditorPosElement {
         }
        }
       }
-      PanelWidgetClass txt_z {
+      EditBoxWidgetClass z_value {
+       visible 1
        clipchildren 1
-       ignorepointer 1
-       color 0.2588 0.5176 0.9176 0.0784
-       position 20 0
-       size 0.9 1
+       keepsafezone 0
+       color 1 1 1 0.9608
+       position 28 0
+       size 256 0.9
        valign center_ref
        hexactpos 1
        vexactpos 1
-       hexactsize 0
+       hexactsize 1
        vexactsize 0
-       style rover_sim_colorable
+       scriptclass "ViewBinding"
+       style Default
+       text "12345678910!"
+       "limit visible" 0
+       "Use default text" 0
+       "exact text" 1
+       font "gui/fonts/Metron22"
        {
-        EditBoxWidgetClass z_value {
-         visible 1
-         clipchildren 1
-         keepsafezone 0
-         color 1 1 1 0.9608
-         position 2 0
-         size 0.97 16
-         valign center_ref
-         hexactpos 1
-         vexactpos 1
-         hexactsize 0
-         vexactsize 1
-         scriptclass "ViewBinding"
-         style Blue_Highlight
-         text "reee"
-         "limit visible" 0
-         "Use default text" 0
-         "exact text" 0
-         font "gui/fonts/sdf_MetronLight24"
-         {
-          ScriptParamsClass {
-           Binding_Name "Z"
-           Two_Way_Binding 1
-          }
-         }
+        ScriptParamsClass {
+         Binding_Name "Z"
+         Two_Way_Binding 1
         }
        }
       }
