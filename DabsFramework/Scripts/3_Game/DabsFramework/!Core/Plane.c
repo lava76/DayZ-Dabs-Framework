@@ -1,5 +1,5 @@
 class Plane: Managed
-{
+{	
 	vector Corner[2], Normal, Aside;
 	
 	void Plane(vector corner0, vector corner1, vector normal, vector aside)
@@ -90,8 +90,8 @@ class Plane: Managed
 		vector p[2] = { Corner[0].Multiply4(mat), Corner[1].Multiply4(mat) };
 		Shape.CreateLines(color.With(3, 255), flags, p, 2);
 		
-		Shape bbox = Shape.Create(ShapeType.BBOX, color, flags, Corner[0], Corner[1]);
-		bbox.SetMatrix(mat);
+		//Shape bbox = Shape.Create(ShapeType.BBOX, color, flags, Corner[0], Corner[1]);
+		//bbox.SetMatrix(mat);
 		
 		//Shape.CreateSphere(LinearColor.PALE_GREEN, ShapeFlags.DOUBLESIDE | ShapeFlags.ONCE, Corner[0].Multiply4(mat), 0.05);
 		//Shape.CreateSphere(LinearColor.PALE_GREEN, ShapeFlags.DOUBLESIDE | ShapeFlags.ONCE, Corner[1].Multiply4(mat), 0.05);
