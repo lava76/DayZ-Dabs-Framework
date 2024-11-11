@@ -1,11 +1,13 @@
 ScrollWidgetClass ListBoxScroll {
- size 1 200
- halign center_ref
- valign center_ref
+ color 0.1176 0.1176 0.1176 1
+ size 1 256
  hexactpos 1
  vexactpos 1
  hexactsize 0
  vexactsize 1
+ scaled 1
+ fixaspect inside
+ style Colorable
  "Scrollbar V" 1
  {
   WrapSpacerWidgetClass ListItemWrapper {
@@ -16,6 +18,7 @@ ScrollWidgetClass ListBoxScroll {
    hexactsize 0
    vexactsize 0
    scriptclass "ViewBinding"
+   Padding 0
    Margin 0
    "Size To Content V" 1
    {

@@ -1,7 +1,7 @@
 WrapSpacerWidgetClass EditorDialog {
  clipchildren 1
  ignorepointer 1
- color 0.7059 0.7059 0.7059 1
+ color 0.7059 0.7059 0.7059 0.7843
  position 0 0
  size 0.35 0
  halign center_ref
@@ -61,8 +61,8 @@ WrapSpacerWidgetClass EditorDialog {
        image0 ""
        mode blend
        "src alpha" 1
-       "no wrap" 1
-       stretch 1
+       "clamp mode" clamp
+       "stretch mode" stretch_w_h
        filter 1
        {
         ScriptParamsClass {
@@ -183,7 +183,7 @@ WrapSpacerWidgetClass EditorDialog {
      clipchildren 0
      ignorepointer 1
      position 0 0
-     size 0.99 0
+     size 1 0
      halign center_ref
      hexactpos 1
      vexactpos 1
@@ -191,7 +191,7 @@ WrapSpacerWidgetClass EditorDialog {
      vexactsize 0
      priority 2
      scriptclass "ViewBinding"
-     Padding 3
+     Padding 7
      Margin 0
      "Size To Content V" 1
      {

@@ -1,5 +1,5 @@
 WrapSpacerWidgetClass EditorOptionsWrapSpacer {
- size 1 20
+ size 1 24
  halign center_ref
  valign center_ref
  hexactpos 1
@@ -11,27 +11,29 @@ WrapSpacerWidgetClass EditorOptionsWrapSpacer {
  {
   FrameWidgetClass EditorOptionLabelFrame {
    ignorepointer 1
-   size 0.3 18
+   size 0.25 1
    valign center_ref
    hexactpos 1
    vexactpos 1
    hexactsize 0
-   vexactsize 1
+   vexactsize 0
    {
     TextWidgetClass EditorOptionSliderLabel {
      ignorepointer 1
-     position 7 0
-     size 1 16
+     position 0 0
+     size 1 1
      valign center_ref
      hexactpos 1
      vexactpos 1
      hexactsize 0
-     vexactsize 1
+     vexactsize 0
      scriptclass "ViewBinding"
      text "Words and stuff"
-     font "gui/fonts/etelkatextpro"
+     font "gui/fonts/MetronBook16"
+     "text offset" -12 0
      "size to text h" 0
      "size to text v" 0
+     "text halign" right
      "text valign" center
      {
       ScriptParamsClass {
@@ -46,37 +48,14 @@ WrapSpacerWidgetClass EditorOptionsWrapSpacer {
    ignorepointer 1
    color 0.3922 0.3922 0.3922 0
    position 0 0
-   size 22 20
+   size 0.07 1
    valign center_ref
    hexactpos 1
    vexactpos 1
-   hexactsize 1
-   vexactsize 1
-   fixaspect inside
+   hexactsize 0
+   vexactsize 0
    style rover_sim_colorable
    {
-    ImageWidgetClass EditorOptionSliderDownIcon {
-     visible 1
-     clipchildren 1
-     inheritalpha 0
-     ignorepointer 1
-     color 0.7059 0.7059 0.7059 0.5882
-     position 0 0
-     size 0.8 0.8
-     halign center_ref
-     valign center_ref
-     hexactpos 1
-     vexactpos 1
-     hexactsize 0
-     vexactsize 0
-     image0 "set:dayz_gui image:icon_collapse"
-     mode blend
-     "src alpha" 1
-     "no wrap" 1
-     stretch 1
-     filter 1
-     rotation 0 0 90
-    }
     ButtonWidgetClass EditorOptionSliderDownButton {
      color 1 1 1 0
      position 0 0
@@ -87,6 +66,30 @@ WrapSpacerWidgetClass EditorOptionsWrapSpacer {
      hexactsize 0
      vexactsize 0
      scriptclass "ViewBinding"
+     {
+      ImageWidgetClass EditorOptionSliderDownIcon {
+       visible 1
+       clipchildren 1
+       inheritalpha 0
+       ignorepointer 1
+       color 0.7059 0.7059 0.7059 0.5882
+       position 0 0
+       size 24 24
+       halign center_ref
+       valign center_ref
+       hexactpos 1
+       vexactpos 1
+       hexactsize 1
+       vexactsize 1
+       image0 "set:dayz_gui image:icon_collapse"
+       mode additive
+       "src alpha" 1
+       "clamp mode" clamp
+       "stretch mode" stretch_h
+       filter 1
+       rotation 0 0 90
+      }
+     }
      {
       ScriptParamsClass {
        Relay_Command "OnButtonDown"
@@ -100,45 +103,20 @@ WrapSpacerWidgetClass EditorOptionsWrapSpacer {
    ignorepointer 1
    color 0.3922 0.3922 0.3922 0
    position 0 0
-   size 22 20
+   size 0.07 1
    halign right_ref
    valign center_ref
    hexactpos 1
    vexactpos 1
-   hexactsize 1
-   vexactsize 1
-   fixaspect inside
+   hexactsize 0
+   vexactsize 0
    priority 4
    style rover_sim_colorable
    {
-    ImageWidgetClass EditorOptionSliderUpIcon {
-     visible 1
-     clipchildren 1
-     inheritalpha 0
-     ignorepointer 1
-     color 0.7059 0.7059 0.7059 0.5882
-     position 0 0
-     size 0.8 0.8
-     halign center_ref
-     valign center_ref
-     hexactpos 1
-     vexactpos 1
-     hexactsize 0
-     vexactsize 0
-     image0 "set:dayz_gui image:icon_collapse"
-     mode blend
-     "src alpha" 1
-     "no wrap" 1
-     stretch 1
-     "flip u" 0
-     "flip v" 0
-     filter 1
-     rotation 0 0 270
-    }
     ButtonWidgetClass EditorOptionSliderUpButton {
      color 1 1 1 0
      position 0 0
-     size 0.7 1
+     size 1 1
      halign right_ref
      valign center_ref
      hexactpos 1
@@ -146,6 +124,32 @@ WrapSpacerWidgetClass EditorOptionsWrapSpacer {
      hexactsize 0
      vexactsize 0
      scriptclass "ViewBinding"
+     {
+      ImageWidgetClass EditorOptionSliderUpIcon {
+       visible 1
+       clipchildren 1
+       inheritalpha 0
+       ignorepointer 1
+       color 0.7059 0.7059 0.7059 1
+       position 0 0
+       size 24 24
+       halign center_ref
+       valign center_ref
+       hexactpos 1
+       vexactpos 1
+       hexactsize 1
+       vexactsize 1
+       image0 "set:dayz_gui image:icon_collapse"
+       mode additive
+       "src alpha" 1
+       "clamp mode" clamp
+       "stretch mode" stretch_h
+       "flip u" 0
+       "flip v" 0
+       filter 1
+       rotation 0 0 270
+      }
+     }
      {
       ScriptParamsClass {
        Relay_Command "OnButtonUp"
@@ -160,15 +164,13 @@ WrapSpacerWidgetClass EditorOptionsWrapSpacer {
    inheritalpha 0
    color 0.7059 0.7059 0.7059 0.3922
    position 0 0
-   size 0.58 20
+   size 0.6 1
    halign center_ref
    valign center_ref
    hexactpos 1
    vexactpos 1
    hexactsize 0
-   vexactsize 1
-   "fill in" 1
-   "listen to input" 1
+   vexactsize 0
    priority 2
    scriptclass "ViewBinding"
    style Slider_1px_alpha_50
@@ -176,6 +178,8 @@ WrapSpacerWidgetClass EditorOptionsWrapSpacer {
    step 0.001
    current 0.5
    vertical 0
+   "fill in" 1
+   "listen to input" 1
    {
     TextWidgetClass EditorOptionSliderReadout {
      clipchildren 1
@@ -183,18 +187,19 @@ WrapSpacerWidgetClass EditorOptionsWrapSpacer {
      ignorepointer 1
      color 0.8627 0.8627 0.8627 1
      position 0 0
-     size 0.9 12
+     size 1 1
      halign center_ref
      valign center_ref
      hexactpos 0
      vexactpos 0
      hexactsize 0
-     vexactsize 1
+     vexactsize 0
      scaled 0
      scriptclass "ViewBinding"
      text "10000"
-     font "gui/fonts/sdf_MetronLight42"
+     font "gui/fonts/MetronBook22"
      "exact text" 0
+     "size to text h" 1
      "text halign" center
      "text valign" center
      {
@@ -234,13 +239,13 @@ WrapSpacerWidgetClass EditorOptionsWrapSpacer {
      inheritalpha 0
      ignorepointer 1
      color 0.7059 0.7059 0.7059 1
-     size 1 20
+     size 1 1
      halign center_ref
      valign center_ref
      hexactpos 1
      vexactpos 1
      hexactsize 0
-     vexactsize 1
+     vexactsize 0
      style blank
     }
    }

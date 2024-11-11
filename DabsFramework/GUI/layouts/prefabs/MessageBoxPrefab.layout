@@ -3,9 +3,8 @@ RichTextWidgetClass CaptionText {
  clipchildren 0
  ignorepointer 1
  keepsafezone 0
- color 0.902 0.902 0.902 1
  position 0 0
- size 0.98 200
+ size 0.8 200
  halign center_ref
  valign center_ref
  hexactpos 1
@@ -16,10 +15,10 @@ RichTextWidgetClass CaptionText {
  scriptclass ""
  style DayZNormal
  text "MessageBox"
- font "gui/fonts/etelkatextpro22"
+ font "gui/fonts/MetronBook22"
  "exact text" 1
  "size to text h" 0
- "size to text v" 0
+ "size to text v" 1
  "text halign" center
  "text valign" center
  wrap 1

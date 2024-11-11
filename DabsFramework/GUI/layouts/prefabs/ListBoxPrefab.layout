@@ -4,9 +4,8 @@ TextListboxWidgetClass ListBox {
  inheritalpha 0
  ignorepointer 0
  keepsafezone 0
- color 1 1 1 0.9961
  position 0 0
- size 1 225
+ size 1 100
  halign center_ref
  valign center_ref
  hexactpos 0
