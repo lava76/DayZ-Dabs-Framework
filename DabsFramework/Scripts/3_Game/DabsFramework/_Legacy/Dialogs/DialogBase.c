@@ -10,7 +10,6 @@ class DialogBase: ScriptView
 	protected DialogBaseController m_DialogBaseController;
 	
 	// View Properties	
-	protected ScrollWidget DialogScroll;
 	protected WrapSpacerWidget WindowDragWrapper;
 	protected ImageWidget TitleIcon;
 	
@@ -186,19 +185,6 @@ class DialogBase: ScriptView
 	    }		
 		
 		return false;
-	}
-	
-	/*
-		Format for size, maybe?
-		vector[0] = X
-		vector[1] = sort level
-		vector[2] = Y
-	*/
-	
-	void AutoSize()
-	{
-		Trace("SetSize");
-		DialogScroll.SetSize(1, m_ContentSize);
 	}
 			
 	// Abstract
