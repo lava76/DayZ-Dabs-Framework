@@ -14,5 +14,5 @@ enum EditorObjectFlags
 	ALLOW_DAMAGE = 512,
 	HIDDEN = 1024,
 	NOSAVE = 2048,
-	ALL = 2147483647
+	NODELETE = 4096,
 };
