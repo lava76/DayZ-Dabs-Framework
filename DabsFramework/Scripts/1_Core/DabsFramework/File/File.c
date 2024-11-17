@@ -1,5 +1,40 @@
 class File: FileSystem
 {	
+	static string GetName(string file)
+	{
+		file.Replace(SystemPath.SEPERATOR_ALT, SystemPath.SEPERATOR);
+		
+		array<string> path_split = {};
+		file.Split(SystemPath.SEPERATOR, path_split);
+		
+		if (path_split.Count() == 0) {
+			return string.Empty;
+		}
+		
+		return path_split[path_split.Count() - 1];
+	}
+	
+	static string GetExtension(string file)
+	{
+		for (int i = file.Length(); --i >= 0; ) {
+			switch (file[i]) {
+				case ".": {
+					return file.Substring(i, file.Length() - i);
+					break;
+				}
+				
+				case SystemPath.SEPERATOR:
+				case SystemPath.SEPERATOR_ALT:
+				case SystemPath.VOLUME_PREFIX:
+				case SystemPath.VOLUME_SEPERATOR: {
+					return string.Empty;
+				}
+			}
+		}
+		
+		return string.Empty;
+	}
+	
     static bool WildcardMatch(string input, string pattern)
     {
         int input_index, pattern_index;
