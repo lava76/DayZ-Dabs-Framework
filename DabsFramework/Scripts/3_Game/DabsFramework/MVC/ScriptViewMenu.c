@@ -112,20 +112,21 @@ class ScriptViewMenu: ScriptView
 		}
 	}
 	
-	void EnterChildMenu(int id)
+	UIScriptedMenu EnterChildMenu(int id)
 	{
-		EnterChildMenu(GetGame().GetMission().CreateScriptedMenu(id));
+		return EnterChildMenu(GetGame().GetMission().CreateScriptedMenu(id));
 	}
 		
-	void EnterChildMenu(ScriptViewMenu menu)
+	UIScriptedMenu EnterChildMenu(ScriptViewMenu menu)
 	{
-		EnterChildMenu(menu.GetUIScriptViewMenu());
+		return EnterChildMenu(menu.GetUIScriptViewMenu());
 	}
 	
-	void EnterChildMenu(UIScriptedMenu scripted_menu)
+	UIScriptedMenu EnterChildMenu(UIScriptedMenu scripted_menu)
 	{
 		m_ChildMenu = scripted_menu;
 		g_Game.GetUIManager().ShowScriptedMenu(m_ChildMenu, m_UIScriptViewMenu);
+		return m_ChildMenu;
 	}
 	
 	//! Is mouse cursor shown on menu enter
