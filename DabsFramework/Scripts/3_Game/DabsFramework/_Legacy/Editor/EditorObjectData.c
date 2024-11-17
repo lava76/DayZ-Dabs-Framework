@@ -49,7 +49,7 @@ class EditorObjectData: SerializableBase
 		
 	Object CreateObject(int flags = ECE_SETUP | ECE_UPDATEPATHGRAPH | ECE_CREATEPHYSICS | ECE_NOLIFETIME | ECE_DYNAMIC_PERSISTENCY)
 	{
-		if (Type.Contains("\\") || Type.Contains("/")) {
+		if (Type.Contains(".p3d")) {
 			return GetGame().CreateStaticObjectUsingP3D(Type, Position, Orientation, Scale);
 		}
 		
@@ -67,17 +67,12 @@ class EditorObjectData: SerializableBase
 	}
 	
 	static EditorObjectData Create(string type, vector transform[4], EditorObjectFlags flags = EFE_DEFAULT)
-	{	
+	{
 		return Create(type, transform[3], Math3D.MatrixToAngles(transform), 1, flags);
 	}
 	
 	static EditorObjectData Create(string type, vector position, vector orientation, float scale, EditorObjectFlags flags)
 	{				
-		//if (GetGame().GetModelName(type) == "UNKNOWN_P3D_FILE") {
-			//EditorLog.Warning(string.Format("EditorObjectData::Create %1 is not a valid Object Type!", type));
-			//return null;
-		//}
-		
 		EditorObjectData data = new EditorObjectData();
 		data.Type = type; 
 		data.Model = GetModelName(data.Type);
@@ -85,11 +80,7 @@ class EditorObjectData: SerializableBase
 		data.Orientation = orientation;
 		data.Scale = scale;
 		data.Flags = flags;
-		data.DisplayName = data.Type;
-		//data.Mod = GetModFromObject(data.Type); todo refactor.
-
-		//EditorLog.Debug(string.Format("EditorObjectData::Create ID: %1", data.m_Id));
-				
+		data.DisplayName = data.Type;				
 		return data;
 	}
 	
@@ -219,7 +210,6 @@ class EditorObjectData: SerializableBase
 		}
 		
 		serializer.Read(Model);
-		
 		return true;
 	}
 	
