@@ -48,6 +48,12 @@ class SystemPath
         path_copy.Replace("\t", string.Empty);
         path_copy.Replace("\r", string.Empty);
         path_copy.Replace("\n", string.Empty);
+        path_copy.Replace("<", string.Empty);
+        path_copy.Replace(">", string.Empty);
+        path_copy.Replace("\"", string.Empty);
+        path_copy.Replace("|", string.Empty);
+        path_copy.Replace("?", string.Empty);
+        path_copy.Replace("'", string.Empty);
         return path_copy;
     }
 
