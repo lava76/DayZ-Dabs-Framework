@@ -1,5 +1,5 @@
 class ListBoxPrefab<Class T>: ScriptView
-{	
+{		
 	ref ScriptInvoker Event_OnClick = new ScriptInvoker();
 	ref ScriptInvoker Event_OnDoubleClick = new ScriptInvoker();
 	
@@ -16,9 +16,9 @@ class ListBoxPrefab<Class T>: ScriptView
 	
 	protected T m_SelectedItem;
 	
-	void InsertItem(string caption, T item)
+	void InsertItem(string caption, T item, string icon = "", LinearColor color = LinearColor.BLUE)
 	{
-		ListBoxPrefabEntry<T> entry(caption, item);		
+		ListBoxPrefabEntry<T> entry(caption, item, icon, color);		
 		entry.SetOwner(this);
 		GetListBoxPrefabController().ListBoxData.Insert(entry);
 	}

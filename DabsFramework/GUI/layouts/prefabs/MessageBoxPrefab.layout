@@ -1,10 +1,10 @@
 RichTextWidgetClass CaptionText {
  visible 1
- clipchildren 0
+ clipchildren 1
  ignorepointer 1
  keepsafezone 0
  position 0 0
- size 0.8 420
+ size 1 420
  halign center_ref
  valign center_ref
  hexactpos 1

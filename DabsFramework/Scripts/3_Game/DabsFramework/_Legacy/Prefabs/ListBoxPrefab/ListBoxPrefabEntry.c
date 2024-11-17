@@ -1,33 +1,33 @@
 class ListBoxPrefabEntry<Class T>: ScriptView
 {
+	ButtonWidget Button;
+	TextWidget Label;
+	ImageWidget Icon;
+	
+	protected T m_Value;
+	
 	protected ListBoxPrefab<T> m_Owner;
 		
-	void ListBoxPrefabEntry(string caption, T data, string icon = "")
+	void ListBoxPrefabEntry(string caption, T data, string icon = "", LinearColor color = LinearColor.BLUE)
 	{
-		GetListBoxPrefabEntryController().Caption = caption;
-		GetListBoxPrefabEntryController().NotifyPropertyChanged("Caption");
+		Label.SetText(caption);
+		Icon.LoadImageFile(0, icon);
+		Icon.SetImage(0);
+		Icon.Show(icon != string.Empty);
+		Button.SetColor(color);
 		
-		GetListBoxPrefabEntryController().Value = data;
-		GetListBoxPrefabEntryController().NotifyPropertyChanged("Value");
+		m_Value = data;
+	}
 		
-		GetListBoxPrefabEntryController().Icon = icon;
-		GetListBoxPrefabEntryController().NotifyPropertyChanged("Icon");
-	}
-	
-	ListBoxPrefabEntryController<T> GetListBoxPrefabEntryController() 
-	{
-		return ListBoxPrefabEntryController<T>.Cast(GetController());
-	}
-	
 	override bool OnClick(Widget w, int x, int y, int button)
 	{
-		m_Owner.EntryOnClick(GetListBoxPrefabEntryController().Value, w, x, y, button);
+		m_Owner.EntryOnClick(m_Value, w, x, y, button);
 		return true;
 	}
 	
 	override bool OnDoubleClick(Widget w, int x, int y, int button)
 	{
-		m_Owner.EntryOnDoubleClick(GetListBoxPrefabEntryController().Value, w, x, y, button);
+		m_Owner.EntryOnDoubleClick(m_Value, w, x, y, button);
 		return true;
 	}
 	
@@ -43,16 +43,11 @@ class ListBoxPrefabEntry<Class T>: ScriptView
 	
 	T GetData()
 	{
-		return GetListBoxPrefabEntryController().Value;
+		return m_Value;
 	}
 	
 	override string GetLayoutFile() 
 	{
 		return "DabsFramework/gui/Layouts/prefabs/Listbox/ListBoxEntryPrefab.layout";
-	}
-	
-	override typename GetControllerType()
-	{
-		return (new ListBoxPrefabEntryController<T>()).Type();
 	}
 }
