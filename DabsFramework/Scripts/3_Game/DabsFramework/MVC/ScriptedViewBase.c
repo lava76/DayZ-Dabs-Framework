@@ -73,7 +73,6 @@ class ScriptedViewBase: Managed
 	
 	void OnWidgetScriptInit(Widget w)
 	{
-		Trace("OnWidgetScriptInit %1", w.ToString());
 		m_LayoutRoot = w;
 		
 #ifdef WORKBENCH
@@ -149,157 +148,131 @@ class ScriptedViewBase: Managed
 	// ### Events are invoked up heirarchy, starting at ViewController, and up to ScriptView
 	bool OnClick(Widget w, int x, int y, int button)
 	{
-		Trace("OnClick: %1", w.GetName());
 		return (m_ParentScriptedViewBase && m_ParentScriptedViewBase.OnClick(w, x, y, button));
 	}
 
 	bool OnModalResult(Widget w, int x, int y, int code, int result)
 	{
-		Trace("OnModalResult: %1", w.GetName());
 		return (m_ParentScriptedViewBase && m_ParentScriptedViewBase.OnModalResult(w, x, y, code, result));
 	}
 
 	bool OnDoubleClick(Widget w, int x, int y, int button)
 	{
-		Trace("OnDoubleClick: %1", w.GetName());
 		return (m_ParentScriptedViewBase && m_ParentScriptedViewBase.OnDoubleClick(w, x, y, button));
 	}
 
 	bool OnSelect(Widget w, int x, int y)
 	{
-		Trace("OnSelect: %1", w.GetName());
 		return (m_ParentScriptedViewBase && m_ParentScriptedViewBase.OnSelect(w, x, y));
 	}
 
 	bool OnItemSelected(Widget w, int x, int y, int row, int column, int oldRow, int oldColumn)
 	{
-		Trace("OnItemSelected: %1", w.GetName());
 		return (m_ParentScriptedViewBase && m_ParentScriptedViewBase.OnItemSelected(w, x, y, row, column, oldRow, oldColumn));
 	}
 
 	bool OnFocus(Widget w, int x, int y)
 	{
-		Trace("OnFocus: %1", w.GetName());
 		return (m_ParentScriptedViewBase && m_ParentScriptedViewBase.OnFocus(w, x, y));
 	}
 
 	bool OnFocusLost(Widget w, int x, int y)
 	{
-		Trace("OnFocusLost: %1", w.GetName());
 		return (m_ParentScriptedViewBase && m_ParentScriptedViewBase.OnFocusLost(w, x, y));
 	}
 
 	bool OnMouseEnter(Widget w, int x, int y)
 	{
-		Trace("OnMouseEnter: %1", w.GetName());
 		return (m_ParentScriptedViewBase && m_ParentScriptedViewBase.OnMouseEnter(w, x, y));
 	}
 
 	bool OnMouseLeave(Widget w, Widget enterW, int x, int y)
 	{
-		Trace("OnMouseLeave: %1", w.GetName());
 		return (m_ParentScriptedViewBase && m_ParentScriptedViewBase.OnMouseLeave(w, enterW, x, y));
 	}
 
 	bool OnMouseWheel(Widget w, int x, int y, int wheel)
 	{
-		Trace("OnMouseWheel: %1", w.GetName());
 		return (m_ParentScriptedViewBase && m_ParentScriptedViewBase.OnMouseWheel(w, x, y, wheel));
 	}
 
 	bool OnMouseButtonDown(Widget w, int x, int y, int button)
 	{
-		Trace("OnMouseButtonDown: %1", w.GetName());
 		return (m_ParentScriptedViewBase && m_ParentScriptedViewBase.OnMouseButtonDown(w, x, y, button));
 	}
 
 	bool OnMouseButtonUp(Widget w, int x, int y, int button)
 	{
-		Trace("OnMouseButtonUp: %1", w.GetName());
 		return (m_ParentScriptedViewBase && m_ParentScriptedViewBase.OnMouseButtonUp(w, x, y, button));
 	}
 
 	bool OnController(Widget w, int control, int value)
 	{
-		Trace("OnController: %1", w.GetName());
 		return (m_ParentScriptedViewBase && m_ParentScriptedViewBase.OnController(w, control, value));
 	}
 
 	bool OnKeyDown(Widget w, int x, int y, int key)
 	{
-		Trace("OnKeyDown: %1", w.GetName());
 		return (m_ParentScriptedViewBase && m_ParentScriptedViewBase.OnKeyDown(w, x, y, key));
 	}
 
 	bool OnKeyUp(Widget w, int x, int y, int key)
 	{
-		Trace("OnKeyUp: %1", w.GetName());
 		return (m_ParentScriptedViewBase && m_ParentScriptedViewBase.OnKeyUp(w, x, y, key));
 	}
 
 	bool OnKeyPress(Widget w, int x, int y, int key)
 	{
-		Trace("OnKeyPress: %1", w.GetName());
 		return (m_ParentScriptedViewBase && m_ParentScriptedViewBase.OnKeyPress(w, x, y, key));
 	}
 
 	bool OnChange(Widget w, int x, int y, bool finished)
 	{
-		Trace("OnChange: %1", w.GetName());
 		return (m_ParentScriptedViewBase && m_ParentScriptedViewBase.OnChange(w, x, y, finished));
 	}
 
 	bool OnDrag(Widget w, int x, int y)
 	{
-		Trace("OnDrag: %1", w.GetName());
 		return (m_ParentScriptedViewBase && m_ParentScriptedViewBase.OnDrag(w, x, y));
 	}
 
 	bool OnDragging(Widget w, int x, int y, Widget reciever)
 	{
-		Trace("OnDragging: %1", w.GetName());
 		return (m_ParentScriptedViewBase && m_ParentScriptedViewBase.OnDragging(w, x, y, reciever));
 	}
 
 	bool OnDraggingOver(Widget w, int x, int y, Widget reciever)
 	{
-		Trace("OnDraggingOver: %1", w.GetName());
 		return (m_ParentScriptedViewBase && m_ParentScriptedViewBase.OnDraggingOver(w, x, y, reciever));
 	}
 
 	bool OnDrop(Widget w, int x, int y, Widget reciever)
 	{
-		Trace("OnDrop: %1 - Reciever: %2", w.GetName(), reciever.ToString());
 		return (m_ParentScriptedViewBase && m_ParentScriptedViewBase.OnDrop(w, x, y, reciever));
 	}
 
 	bool OnDropReceived(Widget w, int x, int y, Widget reciever)
 	{
-		Trace("OnDropReceived: %1 - Reciever: %2", w.GetName(), reciever.ToString());
 		return (m_ParentScriptedViewBase && m_ParentScriptedViewBase.OnDropReceived(w, x, y, reciever));
 	}
 
 	bool OnResize(Widget w, int x, int y)
 	{
-		Trace("OnResize: %1", w.GetName());
 		return (m_ParentScriptedViewBase && m_ParentScriptedViewBase.OnResize(w, x, y));
 	}
 
 	bool OnChildAdd(Widget w, Widget child)
 	{
-		Trace("OnChildAdd: %1", w.GetName());
 		return (m_ParentScriptedViewBase && m_ParentScriptedViewBase.OnChildAdd(w, child));
 	}
 
 	bool OnChildRemove(Widget w, Widget child)
 	{
-		Trace("OnChildRemove: %1", w.GetName());
 		return (m_ParentScriptedViewBase && m_ParentScriptedViewBase.OnChildRemove(w, child));
 	}
 
 	bool OnUpdate(Widget w)
 	{
-		Trace("OnUpdate: %1", w.GetName());
 		return (m_ParentScriptedViewBase && m_ParentScriptedViewBase.OnUpdate(w));
 	}
 		
