@@ -1,4 +1,6 @@
+#ifndef COMPONENT_SYSTEM
 [RegisterLogger(EventManagerLog)]
+#endif
 class EventManagerLog: LoggerBase
 {
 	// inst is of type EventBase

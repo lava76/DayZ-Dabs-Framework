@@ -1,4 +1,6 @@
+#ifndef COMPONENT_SYSTEM
 [RegisterLogger(WebApiLog)]
+#endif
 class WebApiLog: LoggerBase
 {
 	static override void Log(string log)
