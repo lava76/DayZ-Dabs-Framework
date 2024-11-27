@@ -11,7 +11,7 @@ WrapSpacerWidgetClass EditorOptionsWrapSpacer {
  {
   FrameWidgetClass EditorOptionLabelFrame {
    ignorepointer 1
-   size 0.25 1
+   size 0.33 1
    valign center_ref
    hexactpos 1
    vexactpos 1
@@ -48,7 +48,7 @@ WrapSpacerWidgetClass EditorOptionsWrapSpacer {
    ignorepointer 1
    color 0.3922 0.3922 0.3922 0
    position 0 0
-   size 0.07 1
+   size 0.02 1
    valign center_ref
    hexactpos 1
    vexactpos 1
@@ -74,7 +74,7 @@ WrapSpacerWidgetClass EditorOptionsWrapSpacer {
        ignorepointer 1
        color 0.7059 0.7059 0.7059 0.5882
        position 0 0
-       size 24 24
+       size 12 12
        halign center_ref
        valign center_ref
        hexactpos 1
@@ -103,7 +103,7 @@ WrapSpacerWidgetClass EditorOptionsWrapSpacer {
    ignorepointer 1
    color 0.3922 0.3922 0.3922 0
    position 0 0
-   size 0.07 1
+   size 0.02 1
    halign right_ref
    valign center_ref
    hexactpos 1
@@ -132,7 +132,7 @@ WrapSpacerWidgetClass EditorOptionsWrapSpacer {
        ignorepointer 1
        color 0.7059 0.7059 0.7059 1
        position 0 0
-       size 24 24
+       size 12 12
        halign center_ref
        valign center_ref
        hexactpos 1
@@ -164,7 +164,7 @@ WrapSpacerWidgetClass EditorOptionsWrapSpacer {
    inheritalpha 0
    color 0.7059 0.7059 0.7059 0.3922
    position 0 0
-   size 0.6 1
+   size 0.4 1
    halign center_ref
    valign center_ref
    hexactpos 1

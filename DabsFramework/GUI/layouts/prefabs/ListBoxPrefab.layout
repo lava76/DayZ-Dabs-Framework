@@ -21,7 +21,7 @@ TextListboxWidgetClass ListBox {
  colums ""
  lines 10
  "highlight row" 0
- font "gui/fonts/MetronLight"
+ font "gui/fonts/Metron22"
  "text color" 1 1 1 0.9961
  {
   ScriptParamsClass {

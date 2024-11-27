@@ -26,7 +26,7 @@ class ListBoxPrefab<Class T>: ScriptView
 	void ClearItems()
 	{
 		for (int i = 0; i < GetListBoxPrefabController().ListBoxData.Count(); i++) {
-			delete GetListBoxPrefabController().ListBoxData[i];
+			//delete GetListBoxPrefabController().ListBoxData[i];
 		}
 		
 		GetListBoxPrefabController().ListBoxData.Clear();

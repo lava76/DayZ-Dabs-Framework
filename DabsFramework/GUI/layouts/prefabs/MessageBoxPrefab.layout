@@ -15,7 +15,7 @@ RichTextWidgetClass CaptionText {
  scriptclass ""
  style DayZNormal
  text "MessageBox"
- font "gui/fonts/MetronBook22"
+ font "gui/fonts/Metron28"
  "exact text" 1
  "size to text h" 0
  "size to text v" 1
