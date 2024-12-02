@@ -35,8 +35,15 @@ class TooltipView: ScriptView
 	{
 		float pos_x, pos_y;
 		float b_x, b_y, b_w, b_h;
-		widget.GetScreenPos(b_x, b_y);
-		widget.GetScreenSize(b_w, b_h);
+		if (widget) {		
+			widget.GetScreenPos(b_x, b_y);
+			widget.GetScreenSize(b_w, b_h);
+		} else {
+			int m_b_x, m_b_y;
+			GetMousePos(m_b_x, m_b_y);
+			b_x = m_b_x;
+			b_y = m_b_y;
+		}
 		
 		TooltipView tooltip = new TooltipView(text, desc, icon);
 		
@@ -98,7 +105,7 @@ class TooltipView: ScriptView
         vector screen_position = Vector(b_x + b_w / 2, b_y + b_h / 2, 0);
 
         // corner position
-        screen_position = screen_position + screen_direction * 0.8;
+        screen_position = screen_position - screen_direction * 0.8;
 
        // screen_position[0] = screen_position[0] - tooltip_w;
         

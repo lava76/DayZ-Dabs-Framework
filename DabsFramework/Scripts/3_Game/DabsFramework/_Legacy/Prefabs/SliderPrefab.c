@@ -1,11 +1,14 @@
 class SliderPrefab: PrefabBase<float>
 {
 	protected float m_Min, m_Max;
-	protected float m_ButtonIncrementCoef;
+	protected float m_ButtonIncrement, m_Resolution;
 	
-	void SliderPrefab(string caption, Class binding_context, string binding_name, float min = 0, float max = 100, float button_increment_coef = 0.1)
+	void SliderPrefab(string caption, Class binding_context, string binding_name, float min = 0, float max = 1, float button_increment = 0.1, float resolution = Math.EPSILON)
 	{
-		m_Min = min; m_Max = max; m_ButtonIncrementCoef = button_increment_coef;
+		m_Min = min; 
+		m_Max = max; 
+		m_ButtonIncrement = button_increment;
+		m_Resolution = resolution;
 		
 		m_PrefabBaseController.CalculatedValue = GetDefaultValue(binding_context, binding_name);
 		// This line will update the Value param aswell
@@ -48,7 +51,7 @@ class SliderPrefab: PrefabBase<float>
 	
 	float GetIncrementValue()
 	{
-		return (Math.AbsFloat(m_Max - m_Min) * m_ButtonIncrementCoef);
+		return m_ButtonIncrement;
 	}
 	
 	override string GetLayoutFile() 

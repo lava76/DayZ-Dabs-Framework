@@ -61,6 +61,11 @@ class PluginBuildMod: PluginProject
 		if (m_BuildSettings.CopyAddons) {
 			CopyFiles(string.Format("%1\\Addons", m_LaunchSettings.Repository), mod_output + SystemPath.SEPERATOR_ALT + "Addons");
 		}
+		
+		string temp_folder = m_BuildSettings.TempFolder;
+		if (m_BuildSettings.ClearTemp && FileExist(temp_folder)) {
+			DeleteFile(temp_folder);
+		}
 	}
 	
 	int BuildFolder(string mod_input, string mod_output) {

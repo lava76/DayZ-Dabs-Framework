@@ -1,6 +1,6 @@
 class BuildSettings: SerializableBase
 {
-	static const int VERSION = 5;
+	static const int VERSION = 6;
 		
 	protected string m_CurrentFileLocation;
 	
@@ -24,6 +24,12 @@ class BuildSettings: SerializableBase
 	
 	[Attribute("", "combobox", "Build Dependencies", "", ParamEnumArray.FromEnum(YesNo) )]
 	bool Dependencies;
+	
+	[Attribute("", "editbox", "Temp Folder")]
+	string TempFolder;
+	
+	[Attribute("", "combobox", "Clear Temp After Build", "", ParamEnumArray.FromEnum(YesNo) )]
+	bool ClearTemp;
 	
 	void Save(string file)
 	{
@@ -62,6 +68,8 @@ class BuildSettings: SerializableBase
 			settings.PboProject_Args = "+H";
 			settings.AddonBuilder_Args = "";
 			settings.Dependencies = true;
+			settings.TempFolder = "P:\\temp";
+			settings.ClearTemp = false;
 			settings.Save(file);
 			return settings;
 		}
@@ -92,6 +100,8 @@ class BuildSettings: SerializableBase
 		serializer.Write(AddonBuilder_Args);
 		serializer.Write(Dependencies);	
 		serializer.Write(Builder);
+		serializer.Write(TempFolder);
+		serializer.Write(ClearTemp);
 	}
 	
 	override bool Read(Serializer serializer, int version)
@@ -159,6 +169,18 @@ class BuildSettings: SerializableBase
 		}
 		
 		if (!serializer.Read(Builder)) {
+			return false;
+		}
+		
+		if (version <= 5) {
+			return true;
+		}
+		
+		if (!serializer.Read(TempFolder)) {
+			return false;
+		}
+		
+		if (!serializer.Read(ClearTemp)) {
 			return false;
 		}
 				
