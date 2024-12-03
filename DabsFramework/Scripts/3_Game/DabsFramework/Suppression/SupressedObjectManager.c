@@ -2,8 +2,10 @@ class SuppressedObjectManager: Managed
 {
 	static const int RPC_SUPPRESS = -135295235;
 	static const int RPC_UNSUPPRESS = -135295236;
+	static const int RPC_UNSUPPRESS_ALL = -135295237;
 
 	protected ref array<ref SuppressedObject> m_Objects = {};
+	protected ref map<Object, SuppressedObject> m_SuppressedObjectMap = new map<Object, SuppressedObject>();
 		
 	void SuppressedObjectManager()
 	{
@@ -30,22 +32,20 @@ class SuppressedObjectManager: Managed
 		
 	void SuppressMany(notnull array<Object> objects)
 	{
-		array<Object> suppressible_objects = {};
-		foreach (Object object: objects) {
-			if (!IsSuppressible(object)) {
-				return;
-			}
-				
-			suppressible_objects.Insert(object);
-		}
-	
 		ScriptRPC rpc = new ScriptRPC();
-		rpc.Write(suppressible_objects.Count());
-		for (int i = 0; i < suppressible_objects.Count(); i++) {
-			Object suppress = suppressible_objects[i];
+		rpc.Write(objects.Count());
+		for (int i = 0; i < objects.Count(); i++) {
+			if (!IsSuppressible(objects[i])) {
+				rpc.Write(null);
+				continue;
+			}
+
+			Object suppress = objects[i];
 			rpc.Write(suppress);
 			
-			m_Objects.Insert(new SuppressedObject(suppressible_objects[i]));
+			auto suppressed_object = new SuppressedObject(suppress);
+			m_Objects.Insert(suppressed_object);
+			m_SuppressedObjectMap[suppress] = suppressed_object;
 		}
 		
 #ifdef SERVER				
@@ -55,53 +55,44 @@ class SuppressedObjectManager: Managed
 		
 	void Unsupress(notnull Object object)
 	{
-#ifdef SERVER		
 		UnsupressMany({ object });
-#endif
 	}
 	
 	void UnsupressMany(notnull array<Object> objects)
 	{
-#ifdef SERVER
 		ScriptRPC rpc = new ScriptRPC();
 		rpc.Write(objects.Count());
-		foreach (Object object: objects) {
+		foreach (Object object: objects) {		
+			if (!object) {
+				continue;
+			}
+
 			rpc.Write(object);
 			
-			// Remove from m_Objects
-			foreach (auto suppressed_object: m_Objects) {
-				if (suppressed_object.GetObject() == object) {
-					m_Objects.RemoveItem(suppressed_object);
-				}
+			SuppressedObject suppressed_object = m_SuppressedObjectMap[object];
+			if (suppressed_object) {
+				m_Objects.RemoveItem(suppressed_object);
+				m_SuppressedObjectMap.Remove(object);
 			}
 		}
 		
+#ifdef SERVER		
 		rpc.Send(null, RPC_UNSUPPRESS, true);
 #endif
 	}
 	
 	void UnsuppressAll()
 	{
-#ifdef SERVER
-		ScriptRPC rpc = new ScriptRPC();
-		rpc.Write(m_Objects.Count());
-		foreach (auto suppressed_object: m_Objects) {
-			rpc.Write(suppressed_object.GetObject());
-		}
+		m_Objects.Clear();
 		
-		rpc.Send(null, RPC_UNSUPPRESS, true);
+#ifdef SERVER		
+		ScriptRPC().Send(null, RPC_UNSUPPRESS_ALL, true);
 #endif
 	}
 	
 	bool IsSuppressed(notnull Object object)
 	{
-		foreach (auto suppressed_object: m_Objects) {
-			if (suppressed_object.GetObject() == object) {
-				return true;
-			}
-		}
-		
-		return false;
+		return m_SuppressedObjectMap.Contains(object);
 	}
 	
 	static bool IsSuppressible(notnull Object object)
@@ -127,7 +118,7 @@ class SuppressedObjectManager: Managed
 				
 				for (int i = 0; i < suppress_count; i++) {
 					Object suppress;
-					if (!ctx.Read(suppress)) {
+					if (!ctx.Read(suppress) || !suppress) {
 						continue;
 					}
 
@@ -143,17 +134,23 @@ class SuppressedObjectManager: Managed
 				
 				for (int j = 0; j < unsuppress_count; j++) {
 					Object unsuppress;
-					if (!ctx.Read(unsuppress)) {
+					if (!ctx.Read(unsuppress) || !unsuppress) {
 						continue;
 					}
 					
-					foreach (auto suppressed_object: m_Objects) {
-						if (suppressed_object.GetObject() == unsuppress) {
-							m_Objects.RemoveItem(suppressed_object);
-						}
+					SuppressedObject suppressed_object = m_SuppressedObjectMap[unsuppress];
+					if (suppressed_object) {
+						m_Objects.RemoveItem(suppressed_object);
+						m_SuppressedObjectMap.Remove(unsuppress);
 					}
 				}		
 								
+				break;
+			}
+			
+			case RPC_UNSUPPRESS_ALL: {
+				m_Objects.Clear();
+				m_SuppressedObjectMap.Clear();
 				break;
 			}
 		}
