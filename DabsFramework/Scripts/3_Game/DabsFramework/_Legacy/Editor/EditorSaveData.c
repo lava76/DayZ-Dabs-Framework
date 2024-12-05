@@ -3,17 +3,19 @@ class EditorSaveData
 	[NonSerialized()]
 	static const string BIN_CHECK = "EditorBinned";
 	
-	static const int Version = 5;
+	static const int Version = 6;
 	string MapName;
 	vector CameraPosition;
 	
 	ref array<ref EditorObjectData> EditorObjects = {};
 	ref array<ref EditorDeletedObjectData> EditorHiddenObjects = {};	
+	ref array<ref EditorCameraTrackData> CameraTracks = {};
 		
 	void ~EditorSaveData()
 	{
 		delete EditorObjects;
 		delete EditorHiddenObjects;
+		delete CameraTracks;
 	}
 		
 	void Write(Serializer serializer, int version)
@@ -31,6 +33,11 @@ class EditorSaveData
 		serializer.Write(EditorHiddenObjects.Count());
 		foreach (EditorDeletedObjectData deleted_data: EditorHiddenObjects) {
 			deleted_data.Write(serializer, Version);
+		}
+
+		serializer.Write(CameraTracks.Count());
+		foreach (EditorCameraTrackData camera_track: CameraTracks) {
+			camera_track.Write(serializer, Version);
 		}
 	}
 	
@@ -61,6 +68,18 @@ class EditorSaveData
 			EditorDeletedObjectData deleted_data();
 			deleted_data.Read(serializer, read_version);
 			EditorHiddenObjects.Insert(deleted_data);
+		}
+
+		if (read_version <= 5) {
+			return true;
+		}
+
+		int camera_track_count;
+		serializer.Read(camera_track_count);
+		for (int k = 0; k < camera_track_count; k++) {
+			EditorCameraTrackData camera_track = new EditorCameraTrackData();
+			camera_track.Read(serializer, read_version);
+			CameraTracks.Insert(camera_track);
 		}
 		
 		return true;
