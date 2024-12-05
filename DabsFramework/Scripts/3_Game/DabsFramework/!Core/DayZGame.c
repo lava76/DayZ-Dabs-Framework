@@ -122,14 +122,11 @@ modded class DayZGame
 
 		switch (eventTypeId) {
 			case MPSessionStartEventTypeID: {
-				m_EventManager = new EventManager();
-				m_SuppressedObjectManager = new SuppressedObjectManager();
 				break;
 			}
 			
-			case MPSessionEndEventTypeID: {
-				delete m_EventManager;
-				delete m_SuppressedObjectManager;
+			case WorldCleaupEventTypeID: {
+				m_SuppressedObjectManager.UnsuppressAll();
 				break;
 			}
 		}
