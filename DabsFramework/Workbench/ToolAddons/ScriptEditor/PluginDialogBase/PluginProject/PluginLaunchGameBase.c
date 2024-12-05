@@ -75,6 +75,7 @@ class PluginLaunchGameBase: PluginProject
 		// Set up symlinks so game can launch with our cwd
 		PromiseSymLink(game_directory + SystemPath.SEPERATOR_ALT + "Addons", workbench_directory + SystemPath.SEPERATOR_ALT + "Addons");
 		PromiseSymLink(game_directory + SystemPath.SEPERATOR_ALT + "bliss", workbench_directory + SystemPath.SEPERATOR_ALT + "bliss");
+		PromiseSymLink(game_directory + SystemPath.SEPERATOR_ALT + "sakhal", workbench_directory + SystemPath.SEPERATOR_ALT + "sakhal");
 
 		// Delete all extra folders in wb directory
 		array<string> folders_to_save = {};
@@ -203,7 +204,7 @@ class PluginLaunchGameBase: PluginProject
 		string client_launch_params = LaunchSettings.BASE_LAUNCH_PARAMS + string.Format(" \"-mod=%1\" \"-profiles=%2\"", formatted_mod_list, client_profile_directory);
 		string client2_launch_params = LaunchSettings.BASE_LAUNCH_PARAMS + string.Format(" \"-mod=%1\" \"-profiles=%2\"", formatted_mod_list, client2_profile_directory);
 		string server_launch_params = LaunchSettings.BASE_LAUNCH_PARAMS + string.Format(" \"-mod=%1\" \"-profiles=%2\" \"-serverMod=%3\" \"-config=%4\" \"-mission=%5\" -server -port=%6", formatted_mod_list, server_profile_directory, formatted_server_mod_list, m_ServerConfig, server_mission, launch_settings.Port);
-		string offline_launch_params = LaunchSettings.BASE_LAUNCH_PARAMS + string.Format(" \"-mod=%1\" \"-profiles=%2\" \"-mission=%3\"", formatted_mod_list, client_profile_directory, repository_mission);		
+		string offline_launch_params = LaunchSettings.BASE_LAUNCH_PARAMS + string.Format(" \"-mod=%1\" \"-profiles=%2\"", formatted_mod_list, client_profile_directory);		
 		
 		string ip, password;
 		int port;
@@ -229,16 +230,21 @@ class PluginLaunchGameBase: PluginProject
 			server_launch_params += " -filePatching -world=none";
 			offline_launch_params += " -filePatching -world=none";
 		}
+
+		if (launch_settings.LoadMission) {
+			client_launch_params += " -mission=dayzOffline." + m_LaunchSettings.Map;
+			offline_launch_params += " -mission=dayzOffline." + m_LaunchSettings.Map;
+		}
 		
 		if ((launch_settings.LaunchType & GameLaunchType.CLIENT) == GameLaunchType.CLIENT) {
-			Workbench.RunCmd(string.Format("%1 %2 -mission=dayzOffline.%3", game_exe, client_launch_params, m_LaunchSettings.Map));
+			Workbench.RunCmd(string.Format("%1 %2", game_exe, client_launch_params));
 
 			if (launch_settings.SandboxieEnabled) {
 				array<string> outArr = {};
 				launch_settings.SandboxieBoxPath.Split("\\", outArr);
 				string steam_box_name = outArr[outArr.Count() - 1];
 				
-				Workbench.RunCmd(string.Format("\"%1\\Start.exe\" /box:%2 \"%3\" -client2 %4 -mission=dayzOffline.%5", launch_settings.SandboxieInstallPath, steam_box_name, game_exe, client2_launch_params, m_LaunchSettings.Map));
+				Workbench.RunCmd(string.Format("\"%1\\Start.exe\" /box:%2 \"%3\" -client2 %4", launch_settings.SandboxieInstallPath, steam_box_name, game_exe, client2_launch_params, m_LaunchSettings.Map));
 			}
 		}	
 		
