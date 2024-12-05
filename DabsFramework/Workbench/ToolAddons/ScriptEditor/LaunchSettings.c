@@ -31,7 +31,7 @@ enum BuilderType
 
 class LaunchSettings: SerializableBase
 {
-	static const int VERSION = 7;
+	static const int VERSION = 9;
 	
 	static const string CLIENT_PROFILE_NAME = "client";
 	static const string CLIENT2_PROFILE_NAME = "client2";
@@ -45,6 +45,9 @@ class LaunchSettings: SerializableBase
 		
 	[Attribute("", "combobox", "Launch", "", ParamEnumArray.FromEnum(GameLaunchType) )]
 	int LaunchType;
+
+	[Attribute("", "combobox", "Load Mission", "", ParamEnumArray.FromEnum(YesNo) )]
+	int LoadMission;
 	
 	[Attribute("", "combobox", "Environment", "", ParamEnumArray.FromEnum(DayZEnvironmentType) )]
 	int EnvironmentType;
@@ -139,6 +142,7 @@ class LaunchSettings: SerializableBase
 		settings.FilePatching = true;
 		settings.Deloginator = true;
 		settings.AutoClose = true;
+		settings.LoadMission = true;
 		settings.Port = 2302;
 		settings.JoinAddress = "127.0.0.1";
 
@@ -191,6 +195,7 @@ class LaunchSettings: SerializableBase
 		serializer.Write(SandboxieBoxPath);
 		serializer.Write(SandboxieInstallPath);
 		serializer.Write(EnableHive);
+		serializer.Write(LoadMission);
 	}
 	
 	override bool Read(Serializer serializer, int version)
@@ -296,6 +301,14 @@ class LaunchSettings: SerializableBase
 		}
 		
 		if (!serializer.Read(EnableHive)) {
+			return false;
+		}
+
+		if (version < 9) {
+			return true;
+		}
+
+		if (!serializer.Read(LoadMission)) {
 			return false;
 		}
 		
