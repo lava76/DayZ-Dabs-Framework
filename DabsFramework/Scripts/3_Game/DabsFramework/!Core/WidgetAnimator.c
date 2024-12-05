@@ -126,7 +126,7 @@ class WidgetAnimator: Managed
 	}
 	
 	// O(n) for now
-	static void CancelAnimate(Widget source, WidgetAnimatorProperty property = int.MIN, bool reset = false)
+	static void CancelAnimate(Widget source, WidgetAnimatorProperty property = -1, bool reset = false)
 	{
 		if (!source) {
 			return;
