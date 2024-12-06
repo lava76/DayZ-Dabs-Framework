@@ -40,7 +40,8 @@ class ScriptViewMenu: ScriptView
 			g_Game.GetInput().ChangeGameFocus(1, INPUT_DEVICE_KEYBOARD);
 		}
 		
-		g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(g_Game.SetMouseCursorDesiredVisibility, 0, false, UseMouse());
+		// 2 is required, 1 worked but i wanted to be safe. reason: calling CloseAll() on the same frame would lock the cursor away in a vault
+		g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(g_Game.SetMouseCursorDesiredVisibility, 2, false, UseMouse());
 	}
 	
 	void ~ScriptViewMenu()
@@ -59,12 +60,12 @@ class ScriptViewMenu: ScriptView
 		bool use_mouse_parent = (m_UIScriptViewMenu && m_UIScriptViewMenu.GetParentMenu() && m_UIScriptViewMenu.GetParentMenu().UseMouse());
 		// Mouse control
 		if (UseMouse() && !use_mouse_parent) {
-			g_Game.GetInput().ChangeGameFocus(-1, INPUT_DEVICE_MOUSE);
+			//g_Game.GetInput().ChangeGameFocus(-1, INPUT_DEVICE_MOUSE);
 		}
 		
 		bool use_keyboard_parent = (m_UIScriptViewMenu && m_UIScriptViewMenu.GetParentMenu() && m_UIScriptViewMenu.GetParentMenu().UseKeyboard());
 		if (UseKeyboard() && !use_keyboard_parent) {
-			g_Game.GetInput().ChangeGameFocus(-1, INPUT_DEVICE_KEYBOARD);
+			//g_Game.GetInput().ChangeGameFocus(-1, INPUT_DEVICE_KEYBOARD);
 		}
 		
 		g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(g_Game.SetMouseCursorDesiredVisibility, 0, false, use_mouse_parent);
