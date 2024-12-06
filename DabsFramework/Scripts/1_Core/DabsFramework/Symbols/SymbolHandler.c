@@ -8,6 +8,10 @@ class SymbolHandler: ScriptedWidgetEventHandler
 	
 	void OnWidgetScriptInit(Widget w)
 	{
+		if (Symbol_Name == string.Empty) {
+			return;
+		}
+		
 		Symbols symbol = string.Format("image:%1", Symbol_Name);
 		
 		m_ImageWidget = ImageWidget.Cast(w);
