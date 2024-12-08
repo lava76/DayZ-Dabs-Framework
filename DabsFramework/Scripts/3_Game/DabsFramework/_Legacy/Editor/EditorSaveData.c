@@ -3,8 +3,12 @@ class EditorSaveData
 	[NonSerialized()]
 	static const string BIN_CHECK = "EditorBinned";
 	
-	static const int Version = 6;
+	static const int Version = 7;
 	string MapName;
+	string AuthorId; // Steamid64 of original author
+	ref array<string> CreditIds = {}; // SteamId64 of all users that have edited / saved this build
+	DateTime LastModified;
+	DateTime CreationDate;
 	vector CameraPosition;
 	
 	ref array<ref EditorObjectData> EditorObjects = {};
@@ -17,6 +21,15 @@ class EditorSaveData
 		delete EditorHiddenObjects;
 		delete CameraTracks;
 	}
+	
+	static EditorSaveData CreateNew(string uid, DateTime now)
+	{
+		EditorSaveData new_save_data = new EditorSaveData();
+		new_save_data.AuthorId = uid;
+		new_save_data.CreditIds.Insert(uid);
+		new_save_data.CreationDate = now;
+		return new_save_data;
+	}
 		
 	void Write(Serializer serializer, int version)
 	{
@@ -24,6 +37,15 @@ class EditorSaveData
 		serializer.Write(Version);
 		serializer.Write(MapName);
 		serializer.Write(CameraPosition);
+		
+		serializer.Write(AuthorId);
+		serializer.Write(CreditIds.Count());
+		foreach (auto credit: CreditIds) {
+			serializer.Write(credit);
+		}
+		
+		serializer.Write(LastModified);
+		serializer.Write(CreationDate);
 		
 		serializer.Write(EditorObjects.Count());
 		foreach (EditorObjectData data: EditorObjects) {
@@ -54,6 +76,24 @@ class EditorSaveData
 		serializer.Read(MapName);
 		serializer.Read(CameraPosition);
 		
+		// Forcing this towards the beginning of a file to make it readable easier
+		if (read_version >= 7) {
+			serializer.Read(AuthorId);
+			int credits_count;
+			serializer.Read(credits_count);
+			for (int l = 0; l < credits_count; l++) {
+				string credit;
+				serializer.Read(credit);
+				CreditIds.Insert(credit);
+			}
+		} else {
+			LastModified = DateTime.Now();
+			CreationDate = DateTime.Now();
+		}
+		
+		serializer.Read(LastModified);
+		serializer.Read(CreationDate);
+		
 		int editor_object_count;
 		serializer.Read(editor_object_count);
 		for (int i = 0; i < editor_object_count; i++) {
@@ -80,7 +120,7 @@ class EditorSaveData
 			EditorCameraTrackData camera_track = new EditorCameraTrackData();
 			camera_track.Read(serializer, read_version);
 			CameraTracks.Insert(camera_track);
-		}
+		}		
 		
 		return true;
 	}
