@@ -86,13 +86,13 @@ class EditorSaveData
 				serializer.Read(credit);
 				CreditIds.Insert(credit);
 			}
+			
+			serializer.Read(LastModified);
+			serializer.Read(CreationDate);
 		} else {
 			LastModified = DateTime.Now();
 			CreationDate = DateTime.Now();
 		}
-		
-		serializer.Read(LastModified);
-		serializer.Read(CreationDate);
 		
 		int editor_object_count;
 		serializer.Read(editor_object_count);
