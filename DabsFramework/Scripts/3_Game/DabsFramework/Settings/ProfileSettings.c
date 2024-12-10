@@ -154,6 +154,7 @@ class ProfileSettings: Class
 	{
 		string value;
 		if (g_Game.GetProfileString(variable, value)) {
+			value.Replace("'", "");
 			return value;
 		}
 		
