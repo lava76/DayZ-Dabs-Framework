@@ -258,6 +258,7 @@ class ScriptedViewBase: Managed
 
 	bool OnResize(Widget w, int x, int y)
 	{
+		return true;
 		return (m_ParentScriptedViewBase && m_ParentScriptedViewBase.OnResize(w, x, y));
 	}
 
