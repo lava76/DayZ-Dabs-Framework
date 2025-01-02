@@ -99,10 +99,7 @@ class EditorDeletedObjectData: SerializableBase
 	
 	override void Write(Serializer serializer, int version)
 	{
-		if (version <= 5) {
-			serializer.Write(Type);
-		}
-		
+		serializer.Write(Type);
 		serializer.Write(Position);
 		serializer.Write(Flags);
 		serializer.Write(ModelName);
@@ -110,10 +107,7 @@ class EditorDeletedObjectData: SerializableBase
 	
 	override bool Read(Serializer serializer, int version)
 	{
-		if (version <= 5) {
-			serializer.Read(Type);
-		}
-		
+		serializer.Read(Type);
 		serializer.Read(Position);
 		serializer.Read(Flags);
 		

@@ -28,6 +28,8 @@ class SuppressedObject: SerializableBase
 		//object.SetEventMask(EntityEvent.NOTVISIBLE);
 		object.Update();
 		
+		g_Script.CallFunction(object, "DF_OnDeletedFromWorld", null, null);
+		
 #ifdef SERVER
 		GetGame().UpdatePathgraphRegionByObject(object);
 #endif
