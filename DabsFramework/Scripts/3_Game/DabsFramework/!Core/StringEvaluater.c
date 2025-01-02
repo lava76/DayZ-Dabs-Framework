@@ -127,6 +127,10 @@ class StringEvaluaterEvaluater
 	    if (Eat("^", pos, ch)) { 
 			x = Math.Pow(x, ParseFactor(pos, ch)); 
 		}
+		
+		if (Eat("e", pos, ch)) {
+			x = x * Math.Pow(10, ParseFactor(pos, ch));
+		}
 	
 	    return x;
 	}
