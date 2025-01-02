@@ -13,10 +13,6 @@ class RegisterMissionSetting: Class
 
 	void RegisterMissionSetting(GenericWrapper template_wrapper, string file_path)
 	{
-		if (!SystemPath.IsPathRooted(file_path)) {
-			file_path = SystemPath.Combine(SystemPath.Mission(), file_path);
-		}
-
         typename type = template_wrapper.GetDataType();
 		s_RegisteredInstances[type] = file_path;
         s_RegisteredAttributes[type] = template_wrapper;
