@@ -13,7 +13,16 @@ class MissionSetting: SerializableBase
 
 	static string FindSaveFile(typename mission_type)
 	{
-		return RegisterMissionSetting.s_RegisteredInstances[mission_type];
+		string file_path = RegisterMissionSetting.s_RegisteredInstances[mission_type];
+		if (!SystemPath.IsPathRooted(file_path)) {
+			if (g_Game.IsDedicatedServer()) {
+				file_path = SystemPath.Combine(SystemPath.Mission(), file_path);
+			} else {
+				file_path = SystemPath.Combine(SystemPath.Profile(), file_path);
+			}
+		}
+		
+		return file_path;
 	}
 
 	string FindSaveFile()
