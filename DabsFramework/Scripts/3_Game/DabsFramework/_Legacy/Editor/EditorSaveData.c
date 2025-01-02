@@ -3,7 +3,7 @@ class EditorSaveData
 	[NonSerialized()]
 	static const string BIN_CHECK = "EditorBinned";
 	
-	static const int Version = 7;
+	static const int Version = 8;
 	string MapName;
 	string AuthorId; // Steamid64 of original author
 	ref array<string> CreditIds = {}; // SteamId64 of all users that have edited / saved this build

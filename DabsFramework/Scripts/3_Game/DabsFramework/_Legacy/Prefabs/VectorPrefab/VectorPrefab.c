@@ -9,9 +9,9 @@ class VectorPrefab: PrefabBase<vector>
 		m_VectorPrefabController.X = m_PrefabBaseController.Value[0].ToString();
 		m_VectorPrefabController.Y = m_PrefabBaseController.Value[1].ToString();
 		m_VectorPrefabController.Z = m_PrefabBaseController.Value[2].ToString();
-		m_VectorPrefabController.NotifyPropertyChanged("X");
-		m_VectorPrefabController.NotifyPropertyChanged("Y");
-		m_VectorPrefabController.NotifyPropertyChanged("Z");
+		m_VectorPrefabController.NotifyPropertyChanged("X", false);
+		m_VectorPrefabController.NotifyPropertyChanged("Y", false);
+		m_VectorPrefabController.NotifyPropertyChanged("Z", false);
 	}
 		
 	override string GetLayoutFile() 

@@ -28,6 +28,9 @@ class EditorObjectData: SerializableBase
 	[NonSerialized()]
 	ref array<string> Attachments = {};
 	
+	// Slot Id, Slot Type
+	ref map<int, ref EditorObjectData> AttachmentMap = new map<int, ref EditorObjectData>();
+	
 	string Model;
 	
 	[NonSerialized()]
@@ -120,9 +123,11 @@ class EditorObjectData: SerializableBase
 			return;
 		}
 		
-		serializer.Write(Attachments.Count());
-		for (int i = 0; i < Attachments.Count(); i++) {
-			serializer.Write(Attachments[i]);
+		if (version < 8) {
+			serializer.Write(Attachments.Count());
+			for (int i = 0; i < Attachments.Count(); i++) {
+				serializer.Write(Attachments[i]);
+			}
 		}
 		
 		// Serialize parameters
@@ -151,6 +156,12 @@ class EditorObjectData: SerializableBase
 		}
 		
 		serializer.Write(Model);
+
+		serializer.Write(AttachmentMap.Count());
+		foreach (int attachment_slot_id, EditorObjectData attachment: AttachmentMap) {
+			serializer.Write(attachment_slot_id);
+			attachment.Write(serializer, version);
+		}
 	}
 	
 	override bool Read(Serializer serializer, int version)
@@ -166,12 +177,14 @@ class EditorObjectData: SerializableBase
 			return true;
 		}
 		
-		int attachments_count;
-		serializer.Read(attachments_count);
-		for (int i = 0; i < attachments_count; i++) {
-			string attachment;
-			serializer.Read(attachment);
-			Attachments.InsertAt(attachment, i);
+		if (version < 8) {
+			int attachments_count;
+			serializer.Read(attachments_count);
+			for (int i = 0; i < attachments_count; i++) {
+				string attachment;
+				serializer.Read(attachment);
+				Attachments.InsertAt(attachment, i);
+			}
 		}
 		
 		int params_count;
@@ -210,6 +223,22 @@ class EditorObjectData: SerializableBase
 		}
 		
 		serializer.Read(Model);
+
+		if (version < 8) {
+			return true;
+		}
+
+		int attachment_map_count;
+		serializer.Read(attachment_map_count);
+		for (int am = 0; am < attachment_map_count; am++) {
+			int slot_id;
+			serializer.Read(slot_id);
+
+			EditorObjectData new_attachment_data = new EditorObjectData();
+			new_attachment_data.Read(serializer, version);
+			AttachmentMap[slot_id] = new_attachment_data;
+		}
+
 		return true;
 	}
 	

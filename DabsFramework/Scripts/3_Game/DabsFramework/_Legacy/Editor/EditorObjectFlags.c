@@ -1,5 +1,6 @@
 const int EFE_DEFAULT = EditorObjectFlags.BBOX | EditorObjectFlags.MAPMARKER | EditorObjectFlags.OBJECTMARKER | EditorObjectFlags.LISTITEM;
 const int EFE_CAMERA_DEFAULT = EFE_DEFAULT | EditorObjectFlags.EDITOR_ONLY;
+const int EFE_ATTACHMENT = 0;
 const int EFE_BRUSHED = EditorObjectFlags.LISTITEM | 0;
 enum EditorObjectFlags
 {
