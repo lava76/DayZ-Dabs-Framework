@@ -233,7 +233,7 @@ class PluginLaunchGameBase: PluginProject
 
 		if (launch_settings.LoadMission) {
 			client_launch_params += " -mission=dayzOffline." + m_LaunchSettings.Map;
-			offline_launch_params += " -mission=dayzOffline." + m_LaunchSettings.Map;
+			offline_launch_params += string.Format(" -mission=%1", repository_mission);
 		}
 		
 		if ((launch_settings.LaunchType & GameLaunchType.CLIENT) == GameLaunchType.CLIENT) {

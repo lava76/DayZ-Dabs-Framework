@@ -53,8 +53,7 @@ class PluginOpenScriptLogs: PluginProject
                 launch_command += command;
             }
         }
-        
-        Print(launch_command);
+
         int result = Workbench.RunCmd(string.Format("cmd /q /c \"%1\"", launch_command));
         if (result) {
             ErrorDialog("Failed to open vscode");
