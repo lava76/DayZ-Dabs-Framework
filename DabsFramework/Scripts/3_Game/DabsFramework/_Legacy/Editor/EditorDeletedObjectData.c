@@ -107,7 +107,11 @@ class EditorDeletedObjectData: SerializableBase
 	
 	override bool Read(Serializer serializer, int version)
 	{
-		serializer.Read(Type);
+		// this was a horrendous bug that broke backwards compatibility on these versions specifically
+		if (version != 6 && version != 7) {
+			serializer.Read(Type);
+		}
+
 		serializer.Read(Position);
 		serializer.Read(Flags);
 		
