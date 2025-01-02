@@ -4,10 +4,11 @@ class EditBoxNumberPrefab: PrefabBase<StringEvaluater>
 	
 	EditBoxWidget ContentText;
 	
-	void EditBoxNumberPrefab(string caption, Class binding_context, string binding_name, float step_size = 1, float min = float.MIN, float max = float.MAX)
+	// todo: none of the clamps work because m_Min / m_Max are resetting to zero somehow
+	void EditBoxNumberPrefab(string caption, Class binding_context, string binding_name, float step_size = 1, float min = FLT_MIN, float max = FLT_MAX)
 	{
 		m_StepSize = step_size;
-		m_Min = min;
+		m_Min = min;		
 		m_Max = max;
 	}
 
@@ -45,14 +46,14 @@ class EditBoxNumberPrefab: PrefabBase<StringEvaluater>
 			case float: {
 				float float_value;
 				EnScript.GetClassVar(binding_context, binding_name, 0, float_value);
-				float_value = Math.Clamp(float_value, m_Min, m_Max);
+				//float_value = Math.Clamp(float_value, m_Min, m_Max);
 				return float_value.ToString();
 			}
 			
 			case int: {
 				int int_value;
 				EnScript.GetClassVar(binding_context, binding_name, 0, int_value);
-				int_value = Math.Clamp(int_value, m_Min, m_Max);
+				//int_value = Math.Clamp(int_value, m_Min, m_Max);
 				return int_value.ToString();
 			}
 		}
@@ -62,17 +63,18 @@ class EditBoxNumberPrefab: PrefabBase<StringEvaluater>
 	
 	override void PrefabPropertyChanged(string property_name)
 	{
-		float raw_value = m_PrefabBaseController.Value.Parse();
-		raw_value = Math.Clamp(raw_value, m_Min, m_Max);
 		switch (m_BindingVariableType) {
 			case int: {
 				// needs to be exact type, engine wont cast for us
-				EnScript.SetClassVar(m_BindingContext, m_BindingName, 0, (int)raw_value); 
+				int raw_value_int = (int)m_PrefabBaseController.Value.Parse();
+				EnScript.SetClassVar(m_BindingContext, m_BindingName, 0, raw_value_int); 
 				break;
 			}
 			
 			case float: {
-				EnScript.SetClassVar(m_BindingContext, m_BindingName, 0, raw_value);
+				float raw_value_float = m_PrefabBaseController.Value.Parse();
+				//raw_value_float = Math.Clamp(raw_value_float, m_Min, m_Max);
+				EnScript.SetClassVar(m_BindingContext, m_BindingName, 0, raw_value_float);
 				break;
 			}
 			
