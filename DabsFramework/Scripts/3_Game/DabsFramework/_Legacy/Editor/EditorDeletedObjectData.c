@@ -93,7 +93,7 @@ class EditorDeletedObjectData: SerializableBase
 			}
 		}
 		
-		Error(string.Format("[DF] Failed to find %1:%4 in %2m of %3", Type, radius, Position, ModelName)); 
+		PrintToRPT(string.Format("[DF] Failed to find %1:%4 in %2m of %3", Type, radius, Position, ModelName)); 
 		return null;
 	}
 	
