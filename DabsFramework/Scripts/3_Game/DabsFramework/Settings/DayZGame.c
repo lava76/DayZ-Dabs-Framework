@@ -68,21 +68,30 @@ modded class DayZGame
     {
         if (!GetGame().IsMultiplayer() || GetGame().IsDedicatedServer()) {
             foreach (typename mission_setting_type, string mission_setting_file: RegisterMissionSetting<Class>.s_RegisteredInstances) {
-                bool file_exists = File.Exists(mission_setting_file);
+				string mission_setting_file_verified = mission_setting_file;
+				if (!SystemPath.IsPathRooted(mission_setting_file_verified)) {
+					if (GetGame().IsDedicatedServer()) {
+						mission_setting_file_verified = SystemPath.Mission(mission_setting_file_verified);
+					} else {
+						mission_setting_file_verified = SystemPath.Profile(mission_setting_file_verified);
+					}
+				}
+				
+                bool file_exists = File.Exists(mission_setting_file_verified);
                 JsonSerializer json_file_serializer = new JsonSerializer();
                 MissionSetting mission_setting = MissionSetting.Cast(mission_setting_type.Spawn());
                 if (!mission_setting) {
-                    ErrorEx(string.Format("failed to create mission setting type: %1, file: %2", mission_setting_type, mission_setting_file));
+                    ErrorEx(string.Format("failed to create mission setting type: %1, file: %2", mission_setting_type, mission_setting_file_verified));
                     break;
                 }
                 
                 if (!file_exists) {
                     bool save_success = mission_setting.Save();
                     if (!save_success) {
-                        ErrorEx(string.Format("failed to save mission settings: %1", mission_setting_file));
+                        ErrorEx(string.Format("failed to save mission settings: %1", mission_setting_file_verified));
                     }
                 } else {
-                    string file_text = File.ReadAllText(mission_setting_file);
+                    string file_text = File.ReadAllText(mission_setting_file_verified);
                     if (!file_text) {
                         ErrorEx(string.Format("empty json file found"));
                         break;
@@ -90,7 +99,7 @@ modded class DayZGame
 
                     string json_error;
                     if (!json_file_serializer.ReadFromString(mission_setting, file_text, json_error)) {
-                        PrintFormat("json error, file: %1, error: %2", mission_setting_file, json_error);
+                        PrintFormat("json error, file: %1, error: %2", mission_setting_file_verified, json_error);
                         break;
                     }
                 }
