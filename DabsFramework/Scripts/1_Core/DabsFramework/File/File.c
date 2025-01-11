@@ -69,7 +69,7 @@ class File: FileSystem
 		return OpenFile(value, mode);
 	}
 
-    static array<string> ReadAllLines(string file)
+    static array<string> ReadAllLines(string file, int max = int.MAX)
     {
         array<string> result = {};
         if (!File.Exists(file)) {
@@ -84,7 +84,7 @@ class File: FileSystem
         }
 
         string line_content;
-        while (FGets(open_file_handle, line_content) > 0) {
+        while (FGets(open_file_handle, line_content) > 0 && result.Count() < max) {
             result.Insert(line_content);
         }
 
