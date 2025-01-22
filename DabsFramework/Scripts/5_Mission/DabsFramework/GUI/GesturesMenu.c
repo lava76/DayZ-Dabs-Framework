@@ -5,7 +5,12 @@ modded class GesturesMenu
 		super.OnMenuRelease();
 	}
 
+#ifndef DAYZ_1_26
+	//! 1.27+
+	override void GetGestureItems(out array<ref GestureMenuItem> gesture_items, GestureCategories category)
+#else
 	override void GetGestureItems(out ref array<ref GestureMenuItem> gesture_items, GestureCategories category)
+#endif
 	{
 		super.GetGestureItems(gesture_items, category);
 		
