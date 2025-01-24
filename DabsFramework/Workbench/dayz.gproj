@@ -76,7 +76,6 @@ GameProjectClass {
 					Paths {
 						"scripts/5_Mission"
 						"DabsFramework/Scripts/5_Mission"
-						"DabsFramework/GUI"
 					}
 					EntryPoint "CreateMission"
 				}
